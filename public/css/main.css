@@ -1,0 +1,13 @@
+.content{
+	padding-left: 240px;
+}
+
+.menu-logo{
+	width:80%;
+}
+
+.side-nav li{
+	margin: 0 auto;
+	font-family: 'Helvetica';
+	font-weight: bold;
+}
