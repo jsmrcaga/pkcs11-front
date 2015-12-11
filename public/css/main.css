@@ -4,6 +4,8 @@
 
 .menu-logo{
 	width:80%;
+	margin: 0 auto;
+	display: block;
 }
 
 .side-nav li{
