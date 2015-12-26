@@ -1,7 +1,7 @@
 /* ################ PKCS WEB INTERFACE ############ */
 /*					   JS module					*/
 /* ################################################ */
-/* Objectsn definitions */
+/* Objects definitions */
 function cryptoDevice(hardwareSlot, manufacturerID, removableDevice, slotDescription, tokenPresent)
 {
 	this.hardwareSlot = hardwareSlot;
@@ -10,10 +10,14 @@ function cryptoDevice(hardwareSlot, manufacturerID, removableDevice, slotDescrip
 	this.slotDescription = slotDescription;
 	this.tokenPresent = tokenPresent;
 	this.display = function display(){ //return text pannel with fields of the device.
-		var res ="<div class='card-pannel'><table><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
+		var res ="<div class='col s3 card-panel'><table class='striped'><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
 		for(e in this)
 		{
-			res +="<tr><td>"+e+"</td><td>"+this[e]+"</td></td>";
+			if(e != "display")
+			{
+				res +="<tr><td>"+e+"</td><td>"+this[e]+"</td></td>";	
+			}
+			
 		}
 		res +="</tbody></table></div>";
 		return res;
@@ -65,6 +69,18 @@ function removeCd(position)//removes a CD from the cryptoDevice list in the posi
 }
 function displayCd(cD)//display a CD selected int the central panel
 {
-
+	var tmp= $('#display-panel').html();
+	console.log(tmp);
+	$('#display-panel').html(tmp + cD.display());
 	//to implement
+}
+function testDisp()// test function that display a random cD into the central panel
+{
+	var cD = new cryptoDevice();
+	cD.hardwareSlot = "yes";
+	cD.manufacturerID = "yes";
+	cD.removableDevice = "yes"
+	cD.slotDescription  = "yes";
+	cD.tokenPresent = "yes";
+	displayCd(cD);
 }
