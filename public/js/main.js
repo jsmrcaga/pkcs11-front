@@ -10,10 +10,10 @@ function cryptoDevice(hardwareSlot, manufacturerID, removableDevice, slotDescrip
 	this.slotDescription = slotDescription;
 	this.tokenPresent = tokenPresent;
 	this.display = function display(){ //return text pannel with fields of the device.
-		var res ='<div class="card-pannel"><table><thead><tr><th data-field="id">Name</th><th data-field="name">Value</th></tr></thead><tbody>';
+		var res ="<div class='card-pannel'><table><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
 		for(e in this)
 		{
-			res +="<tr><td>".e."</td><td>".this[e]."</td></td>";
+			res +="<tr><td>"+e+"</td><td>"+this[e]+"</td></td>";
 		}
 		res +="</tbody></table></div>";
 		return res;
