@@ -1,6 +1,7 @@
 /* ################ PKCS WEB INTERFACE ############ */
 /*					   JS module					*/
 /* ################################################ */
+
 /* Objects definitions */
 function cryptoDevice(hardwareSlot, manufacturerID, removableDevice, slotDescription, tokenPresent)
 {
@@ -9,6 +10,7 @@ function cryptoDevice(hardwareSlot, manufacturerID, removableDevice, slotDescrip
 	this.removableDevice = removableDevice;
 	this.slotDescription = slotDescription;
 	this.tokenPresent = tokenPresent;
+
 	this.display = function display(){ //return text pannel with fields of the device.
 		var res ="<div class='col s3 card-panel'><table class='striped'><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
 		for(e in this)
