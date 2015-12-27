@@ -36,8 +36,8 @@ Object.defineProperty(Array.prototype, "findObjectByProp", {
  * @param {} value - The value to match in the obejct
  * @returns {Object} Returns found object or NULL
 */
-Object.defineProperty(Array.prototype, "findObjectByProp", {
-	value: function _findObjectByProp (prop, value) {
+Object.defineProperty(Array.prototype, "findObjectsByProp", {
+	value: function _findObjectsByProp (prop, value) {
 		var results = [];
 		for(var i = 0; i<this.length; i++){
 			if (this[i][prop] == value){
