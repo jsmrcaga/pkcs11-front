@@ -12,7 +12,9 @@ function cryptoDevice(id, hardwareSlot, manufacturerID, removableDevice, slotDes
 	this.slotDescription = slotDescription;
 	this.tokenPresent = tokenPresent;
 	this.display = function display(){ //return text pannel with fields of the device. the id of this device is "cd-*its number*"
-		var res ="<div class='col s3 card-panel' id='cd-"+this.id+"'><table class='striped'><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
+		var res ="<div class='col s3 card-panel' id='cd-"+this.id+"'>";
+		res +="<a href='#' class='secondary-content'><i class='material-icons' id='rd-cd-"+this.id+"'>remove</i></a>"; // reduce button
+		res += "<table class='striped'><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
 		for(e in this)
 		{
 			if(e != "display")
@@ -21,7 +23,8 @@ function cryptoDevice(id, hardwareSlot, manufacturerID, removableDevice, slotDes
 			}
 			
 		}
-		res +="</tbody></table></div>";
+		res +="</tbody></table></div>"
+		
 		return res;
 	}
 }
@@ -81,13 +84,33 @@ function removeCd(id)//removes a CD from the cryptoDevice list in the position p
 	//actualize display of collapsed list
 	actualizeList();
 }
-function displayCd(cD)//display a CD selected int the central panel
+function displayCd(id)//display a CD selected int the central panel
 {
-	var tmp= $('#display-panel').html();
-	console.log(tmp);
-	$('#display-panel').html(tmp + cD.display());
-	//to implement
+	//We first test if the element is not already displayed
+	var t = $("#cd-"+id);
+	if(t.length!=0)
+	{
+		//element already displayed
+		Materialize.toast('crypto-device already displayed !', 4000);
+	}
+	else
+	{
+		//display it
+		var position = findIndexById(id);
+		var cD = cdList[position];
+		var tmp= $('#display-panel').html();
+		console.log(tmp);
+		$('#display-panel').append(cD.display());
+		$("#rd-cd-"+cD.id).click((function _clicRm(index){
+																			return function _undispCd()
+																										{
+																											unDisplayCd(cdList[index].id);
+																										}
+																			})(position)
+										);	// add actions to the displayed div
+	}	
 }
+
 function unDisplayCd(id)//remove CD selected int the central panel
 {
 	
@@ -96,7 +119,7 @@ function unDisplayCd(id)//remove CD selected int the central panel
 	$("#cd-"+id).remove();
 
 }
-function actualizeList()
+function actualizeList()// actualize the collapsing list with the array of devices
 {
 	var res="";
 	$("#crypto-list").html("");
@@ -113,7 +136,8 @@ function actualizeList()
 			if(e !='undefined')
 			{
 				res +="<li class='collection-item' id='cList-"+cdList[e].id+"'>crypto-device number : "+cdList[e].id;
-				res +="<a href='#' class='secondary-content'><i class='material-icons' id='rm-cd-"+cdList[e].id+"'>close</i></a></li>";
+				res +="<a href='#' class='secondary-content'><i class='material-icons' id='rm-cd-"+cdList[e].id+"'>close</i></a>";// adds delete button
+				res +="<a href='#' class='secondary-content'><i class='material-icons' id='dp-cd-"+cdList[e].id+"'>add</i></a></li>";// adds show button
 				$("#crypto-list").html($("#crypto-list").html()+res);														
 				res="";
 			}
@@ -127,12 +151,19 @@ function actualizeList()
 																											removeCd(cdList[index].id);
 																										}
 																			})(e)	
-													);	
+													);
+			$("#dp-cd-"+cdList[e].id).click((function _clicRm(index){
+																			return function _displayCd()
+																										{
+																											displayCd(cdList[index].id);
+																										}
+																			})(e)	
+													);		
 		}							
 	}
 		
 }
-function testDisp(nb)// test function that display a random cD into the central panel
+function testCd(nb)// test function that display a random cD into the central panel
 {
 	 if (typeof(nb)==='undefined') nb = 1;
 	var cD = new cryptoDevice();
@@ -143,7 +174,7 @@ function testDisp(nb)// test function that display a random cD into the central 
 	cD.slotDescription  = "yes";
 	cD.tokenPresent = "yes";
 	cdList.push(cD);
-	displayCd(cD);
+	displayCd(cD.id);
 	actualizeList();
 }
 
@@ -151,7 +182,7 @@ function testDisp(nb)// test function that display a random cD into the central 
 
 	$(".button-collapse").sideNav();
 	$('.modal-trigger').leanModal();
-	testDisp(1);
-	testDisp(2);
-	testDisp(3);
+	testCd(1);
+	testCd(2);
+	testCd(3); // just for testing functionalities
 	actualizeList();
