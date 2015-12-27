@@ -60,7 +60,6 @@ Object.defineProperty(Array.prototype, "last", {
 		this[this.length - 1] = a;
 	},
 	enumerable: false,
-	writable: false
 });
 
 // *************************
