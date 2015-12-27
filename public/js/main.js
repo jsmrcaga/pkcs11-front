@@ -3,7 +3,7 @@
 /* ################################################ */
 
 /* Objects definitions */
-function cryptoDevice(id, hardwareSlot, manufacturerID, removableDevice, slotDescription, tokenPresent)
+function slot(id, hardwareSlot, manufacturerID, removableDevice, slotDescription, tokenPresent)
 {
 	this.id=id;
 	this.hardwareSlot = hardwareSlot;
@@ -11,10 +11,9 @@ function cryptoDevice(id, hardwareSlot, manufacturerID, removableDevice, slotDes
 	this.removableDevice = removableDevice;
 	this.slotDescription = slotDescription;
 	this.tokenPresent = tokenPresent;
-	this.display = function display(){ //return text pannel with fields of the device. the id of this device is "cd-*its number*"
-		var res ="<div class='col s3 card-panel' id='cd-"+this.id+"'>";
-		res +="<a href='#' class='secondary-content'><i class='material-icons' id='rd-cd-"+this.id+"'>remove</i></a>"; // reduce button
-		res += "<table class='striped'><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
+	this.display = function display(){ //return text pannel with fields of the slot. the id of this device is "sl-*its number*"	
+		var res = "<li><div class='collapsible-header'> slot " + this.id+"</div>";
+        res += "<div class='collapsible-body'><table class='striped '><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
 		for(e in this)
 		{
 			if(e != "display")
@@ -23,12 +22,42 @@ function cryptoDevice(id, hardwareSlot, manufacturerID, removableDevice, slotDes
 			}
 			
 		}
-		res +="</tbody></table></div>"
+		res +="</tbody></table></div></li>"
 		
 		return res;
 	}
 }
+function cryptoDevice()
+{
+	this.id = singleId();
+	this.slots =new Array();
+	this.nbSlots = function _nbSlots(){ return this.slots.length;};
+	this.display = function _display(){
+		var res ="<div class='col s3' id='cd-"+this.id+"'>";
+		res +="<div class ='card-panel'> Crytpo device "+ this.id;
+		res += "<a href='#' class='secondary-content'><i class='material-icons' id='rd-cd-"+this.id+"'>remove</i></a></div>"; 	// reduce button
+		res += "<div><ul class='collapsible' data-collapsible='accordion'>";
+		for(var i=0; i<this.nbSlots(); i++)
+		{
+			res += this.slots[i].display();
+		}
+		res +="</ul></div>";
+		return res;
+	}
+	this.push = function _pushSlot(slot){
+		this.slots.push(slot);
+		var t = $("#cd-"+this.id);
+		if(t.length!=0)
+		{
+			//element already displayed
+			unDisplayCd(this.id)
+			displayCd(this.id);
+		}
+	}
 
+
+
+}
 
 /* Global Variables */
 
@@ -43,31 +72,52 @@ function findIndexById(id)
 		}
 		return -1;
 }
-
+var iter=0; // global variable to create unique ids for CDs.
+function singleId()
+{
+	var ret = iter;
+	iter ++;
+	return ret ;
+}//to increment each time we use the variable
 
 /* pks11 api interface  request     */
 //fonctions to call the api
 
-
 /* pks11 api interface answers      */
 //fonctions to treat api responses
 
-function addCd(JsonAnswer)//adds a CD from Json answer into the crypto-device list
+function addSlot(JsonAnswer, cD)//adds a slot from Json answer into the crypto-device
 {
 	//create the object
-	var cD = new cryptoDevice();
+	var sl = new slot();
+	//create 
 	var tmp = JSON.parse(JsonAnswer);
-	cD.hardwareSlot = tmp.hardwareSlot;
-	cD.manufacturerID = tmp.manufacturerID;
-	cD.removableDevice = tmp.removableDevice;
-	cD.slotDescription  = tmp.slotDescription;
-	cD.tokenPresent = tmp.tokenPresent;
+	sl.hardwareSlot = tmp.hardwareSlot;
+	sl.manufacturerID = tmp.manufacturerID;
+	sl.removableDevice = tmp.removableDevice;
+	sl.slotDescription  = tmp.slotDescription;
+	sl.tokenPresent = tmp.tokenPresent;
 	//push the object
-	cdList.push(cD);
+	cD.push(sl);
 	// actualize collapsed list
 	actualizeList();
-	// display in central pannel
-	displayCd(cD);
+	//actualize display in central pannel if there
+	var t = $("#cd-"+id);
+	if(t.length!=0)
+	{
+		//element already displayed
+		unDisplayCd(cD)
+		displayCd(cD);
+	}
+}
+/************* utilities **************************************/
+function addCd()// returns a new cd.
+{
+	var cD = new cryptoDevice(); 
+	cdList.push(cD);
+	displayCd(cD.id);
+	actualizeList();
+	return cD;
 }
 function removeCd(id)//removes a CD from the cryptoDevice list in the position position (integer Required)
 {
@@ -108,6 +158,9 @@ function displayCd(id)//display a CD selected int the central panel
 																										}
 																			})(position)
 										);	// add actions to the displayed div
+		$('.collapsible').collapsible({
+      							accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    									});
 	}	
 }
 
@@ -119,6 +172,7 @@ function unDisplayCd(id)//remove CD selected int the central panel
 	$("#cd-"+id).remove();
 
 }
+
 function actualizeList()// actualize the collapsing list with the array of devices
 {
 	var res="";
@@ -167,12 +221,14 @@ function testCd(nb)// test function that display a random cD into the central pa
 {
 	 if (typeof(nb)==='undefined') nb = 1;
 	var cD = new cryptoDevice();
-	cD.id=nb;
-	cD.hardwareSlot = "yes";
-	cD.manufacturerID = "yes";
-	cD.removableDevice = "yes"
-	cD.slotDescription  = "yes";
-	cD.tokenPresent = "yes";
+	sl = new slot();
+	sl.id=nb;
+	sl.hardwareSlot = "yes";
+	sl.manufacturerID = "yes";
+	sl.removableDevice = "yes"
+	sl.slotDescription  = "yes";
+	sl.tokenPresent = "yes";
+	cD.push(sl);
 	cdList.push(cD);
 	displayCd(cD.id);
 	actualizeList();
@@ -182,7 +238,22 @@ function testCd(nb)// test function that display a random cD into the central pa
 
 	$(".button-collapse").sideNav();
 	$('.modal-trigger').leanModal();
+	$(document).ready(function(){
+    $('.collapsible').collapsible({
+      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+  });
+/* testing functionnalites, debug  */
 	testCd(1);
-	testCd(2);
-	testCd(3); // just for testing functionalities
+	testCd(1);
+	testCd(1); // just for testing functionalities
+	sl = new slot();
+	sl.id=2;
+	sl.hardwareSlot = "yes";
+	sl.manufacturerID = "yes";
+	sl.removableDevice = "yes"
+	sl.slotDescription  = "yes";
+	sl.tokenPresent = "yes";
+	cdList[0].push(sl);
 	actualizeList();
+
