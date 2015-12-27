@@ -114,18 +114,21 @@ function actualizeList()
 			{
 				res +="<li class='collection-item' id='cList-"+cdList[e].id+"'>crypto-device number : "+cdList[e].id;
 				res +="<a href='#' class='secondary-content'><i class='material-icons' id='rm-cd-"+cdList[e].id+"'>close</i></a></li>";
-				$("#crypto-list").html($("#crypto-list").html()+res);
-				$("#rm-cd-"+cdList[e].id).click((function _clicRm(index){
-																		return function _removeCd()
-																									{
-																										removeCd(cdList[index].id);
-																									}
-																		})(e)	
-												);							
-																	
+				$("#crypto-list").html($("#crypto-list").html()+res);														
 				res="";
 			}
 		}
+		for(var e=0; e<cdList.length; e++)
+		{
+
+			$("#rm-cd-"+cdList[e].id).click((function _clicRm(index){
+																			return function _removeCd()
+																										{
+																											removeCd(cdList[index].id);
+																										}
+																			})(e)	
+													);	
+		}							
 	}
 		
 }
