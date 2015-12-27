@@ -11,6 +11,7 @@ config.routing = {
 	}
 };
 
+
 function getSlotNumber(callback) {
 	var options = {
 		url: config.routing.host + config.routing.api.slots.number,
@@ -21,7 +22,7 @@ function getSlotNumber(callback) {
 		callback:callback
 	};
 
-	Workshop.ajax(callback);
+	Workshop.ajax(options);
 }
 
 function getSlot(id, callback){
@@ -35,6 +36,13 @@ function getSlot(id, callback){
 		callback:callback
 	};
 
-	Workshop.ajax(callback);
+	Workshop.ajax(options);
 }
 
+
+app.routing = {
+	slots:{
+		getSlotNumber : getSlotNumber,
+		getSlot: getSlot
+	}
+}
