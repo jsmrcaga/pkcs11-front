@@ -15,15 +15,20 @@ var Workshop = {};
  * @param {} value - The value to match in the obejct
  * @returns {Object} Returns found object or NULL 
 */
-Array.prototype.findObjectByProp = function _findObjectByProp (prop, value) {
-	for(var i = 0; i<this.length; i++){
-		if (this[i][prop] == value){
-			this[i].found_index = i;
-			return this[i];
+Object.defineProperty(Array.prototype, "findObjectByProp", {
+	value: function _findObjectByProp (prop, value) {
+		for(var i = 0; i<this.length; i++){
+			if (this[i][prop] == value){
+				this[i].found_index = i;
+				return this[i];
+			}
 		}
-	}
-	return null;
-};
+		return null;
+	},
+	enumerable: false,
+	writable:false,
+});
+
 
 /**
  * Finds multiple objects in an array thanks to a single property
@@ -31,16 +36,20 @@ Array.prototype.findObjectByProp = function _findObjectByProp (prop, value) {
  * @param {} value - The value to match in the obejct
  * @returns {Object} Returns found object or NULL
 */
-Array.prototype.findObjectsByProp = function _findObjectByProp (prop, value) {
-	var results = [];
-	for(var i = 0; i<this.length; i++){
-		if (this[i][prop] == value){
-			this[i].found_index = i;
-			results.push(this[i]);
+Object.defineProperty(Array.prototype, "findObjectsByProp", {
+	value: function _findObjectsByProp (prop, value) {
+		var results = [];
+		for(var i = 0; i<this.length; i++){
+			if (this[i][prop] == value){
+				this[i].found_index = i;
+				results.push(this[i]);
+			}
 		}
-	}
-	return (results.length == 0) ? null : results;
-};
+		return (results.length == 0) ? null : results;
+	},
+	enumerable: false,
+	writable: false
+});
 
 Object.defineProperty(Array.prototype, "last", {
 	get : function(){
@@ -49,7 +58,8 @@ Object.defineProperty(Array.prototype, "last", {
 
 	set : function(a){
 		this[this.length - 1] = a;
-	}
+	},
+	enumerable: false,
 });
 
 // *************************
@@ -62,25 +72,28 @@ Object.defineProperty(Array.prototype, "last", {
  * @param {number} b - The upper value to check against
  * @returns {bool}
 */
-Number.prototype.isBetween = function _isBetween (a, b, includes){
-	if (!includes) includes = 0;
-	switch(includes){
-		case -1 :
-			if(this >= a && this < b) return true;
-			break;
-		case 2 :
-			if(this >= a && this <= b) return true;
-			break;
-		case 1 :
-			if(this > a && this <= b) return true;
-			break;
-		case 0 :
-			if(this > a && this < b) return true;
-			break;
-	}
-	return false;
-};
-
+Object.defineProperty(Number.prototype, "isBetween", {
+	value: function _isBetween (a, b, includes){
+		if (!includes) includes = 0;
+		switch(includes){
+			case -1 :
+				if(this >= a && this < b) return true;
+				break;
+			case 2 :
+				if(this >= a && this <= b) return true;
+				break;
+			case 1 :
+				if(this > a && this <= b) return true;
+				break;
+			case 0 :
+				if(this > a && this < b) return true;
+				break;
+		}
+		return false;
+	},
+	enumerable: false,
+	writable: false
+});
 
 // *************************
 // Math
