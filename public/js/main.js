@@ -138,7 +138,7 @@ function singleId()
 /* pks11 api interface answers      */
 //fonctions to treat api responses
 
-function addSlot(JsonAnswer, cD)//adds a slot from Json answer into the crypto-device
+function addSlotDescription(JsonAnswer, cD)//adds a slot from Json answer into the crypto-device
 {
 	//create the object
 	var sl = new slot();
