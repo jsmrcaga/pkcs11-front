@@ -5,6 +5,7 @@
 /* Objects definitions */
 function info(id, hardwareSlot, manufacturerID, removableDevice, slotDescription, tokenPresent)
 {
+	this.name = "informations";
 	this.id=id;
 	this.hardwareSlot = hardwareSlot;
 	this.manufacturerID = manufacturerID;
@@ -12,17 +13,68 @@ function info(id, hardwareSlot, manufacturerID, removableDevice, slotDescription
 	this.slotDescription = slotDescription;
 	this.tokenPresent = tokenPresent;
 	this.display = function display(){ //return text pannel with fields of the slot. the id of this device is "sl-*its number*"	
-		var res = "<li><div class='collapsible-header'>Device informations</div>";
+		var res = "<li><div class='collapsible-header'>"+this.name+"</div>";
         res += "<div class='collapsible-body'><table class='striped '><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
 		for(e in this)
 		{
-			if(e != "display")
+			if(e != "display" && e != "name")
 			{
 				res +="<tr><td>"+e+"</td><td>"+this[e]+"</td></td>";	
 			}
 			
 		}
-		res +="</tbody></table></div></li>"
+		res +="</tbody></table></div></li>";
+		
+		return res;
+	}
+}
+function action(name, action)
+{
+	this.name = name;
+	this.action = action;
+}
+function managment(listOfPossibleActions)
+{
+	this.name ="Managment";
+	this.name.display = false;
+	this.mngOperations = new Array(listOfPossibleActions);
+	this.addMngOperation = function _addMngOperation(op){// function to add.
+		this.mngOperations.push(op);
+	}
+	this. display =function display(){ //return html of the table  Needs further bind for .click() operations
+		var res = "<li><div class='collapsible-header'>"+this.name+"</div>";
+        res += "<div class='collapsible-body'><table class='striped '><thead><tr><th data-field='id'>Action</th></tr></thead><tbody>";
+		for(var i=0;i< this.mngOperations.length;i++)
+		{
+
+				res +="<tr><td><input type='submit' id='mng-"+i+"' value='"+this.mngOperations[i].name+"'></input></td></tr>";
+			
+			
+		}
+		res +="</tbody></table></div></li>";
+		
+		return res;
+	}
+}
+function cryptOperations(listOfPossibleActions)
+{
+	this.name ="Crypto-Operations";
+	this.name.display = false;
+	this.crtOperations = new Array(listOfPossibleActions);
+	this.addCrtOperation = function _addCrtOperation(op){// function to add.
+		this.crtOperations.push(op);
+	}
+	this. display =function display(){ ////return html of the table. Needs further bind for .click() operations
+		var res = "<li><div class='collapsible-header'>"+this.name+"</div>";
+        res += "<div class='collapsible-body'><table class='striped '><thead><tr><th data-field='id'>Action</th></tr></thead><tbody>";
+		for(var i=0;i< this.crtOperations.length;i++)
+		{
+
+				res +="<tr><td><input type='submit' id='crt-"+i+"' value='"+this.crtOperations[i].name+"'></input></td></tr>";	
+
+			
+		}
+		res +="</tbody></table></div></li>";
 		
 		return res;
 	}
@@ -157,7 +209,11 @@ function displayCd(id)//display a CD selected int the central panel
 																											unDisplayCd(cdList[index].id);
 																										}
 																			})(position)
-										);	// add actions to the displayed div
+										);// add actions to the displayed div
+/*		for(var i = 0; i< cD.mngOperations.length;i++)
+		{
+			$("#cd-"+cD.id).children("#crt-"+i).click(cD.mngOperations[i].action); // add all operation interactions
+		}*/	
 		$('.collapsible').collapsible({
       							accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
     									});
@@ -217,6 +273,7 @@ function actualizeList()// actualize the collapsing list with the array of devic
 	}
 		
 }
+function yolo(){return "yolo";}
 function testCd(nb)// test function that display a random cD into the central panel
 {
 	 if (typeof(nb)==='undefined') nb = 1;
@@ -229,6 +286,11 @@ function testCd(nb)// test function that display a random cD into the central pa
 	sl.slotDescription  = "yes";
 	sl.tokenPresent = "yes";
 	cD.push(sl);
+	act = new action("toast", toastMe)
+	mg = new managment(act);
+	cD.push(mg);
+	cO = new cryptOperations(act);
+	cD.push(cO);
 	cdList.push(cD);
 	displayCd(cD.id);
 	actualizeList();
@@ -244,6 +306,11 @@ function testCd(nb)// test function that display a random cD into the central pa
     });
   });
 /* testing functionnalites, debug  */
+
+function toastMe()
+{
+	Materialize.toast("it's a toast !", 4000);
+}
 	testCd(1);
 	testCd(1);
 	testCd(1); // just for testing functionalities
