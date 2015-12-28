@@ -29,7 +29,7 @@ function cryptoDevice(id, hardwareSlot, manufacturerID, removableDevice, slotDes
 
 /* Global Variables */
 
-var cdList = new Array();
+var cdList = [];
 function findIndexById(id)
 {
 
@@ -96,6 +96,7 @@ function unDisplayCd(id)//remove CD selected int the central panel
 	$("#cd-"+id).remove();
 
 }
+
 function actualizeList()
 {
 	var res="";
@@ -120,18 +121,16 @@ function actualizeList()
 		}
 		for(var e=0; e<cdList.length; e++)
 		{
-
 			$("#rm-cd-"+cdList[e].id).click((function _clicRm(index){
-																			return function _removeCd()
-																										{
-																											removeCd(cdList[index].id);
-																										}
-																			})(e)	
-													);	
+				return function _removeCd(){
+					removeCd(cdList[index].id);
+				}
+			})(e));	
 		}							
 	}
 		
 }
+
 function testDisp(nb)// test function that display a random cD into the central panel
 {
 	 if (typeof(nb)==='undefined') nb = 1;

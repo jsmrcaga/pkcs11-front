@@ -11,6 +11,9 @@ config.routing = {
 	}
 };
 
+// CALLBACKS
+	// Callbacks MUST be fct(err, data). Error is sent first.
+
 
 function getSlotNumber(callback) {
 	var options = {

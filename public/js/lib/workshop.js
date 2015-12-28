@@ -238,9 +238,9 @@ function AJAXCall (params){
 	var xml = new XMLHttpRequest();
 	xml.onreadystatechange = function(){
 		if(xml.readyState == 4){
-			if (xml.status == params.status || 200){
+			if (xml.status == (params.status || 200)){
 				//readyState 4 = end of call and success
-				if (typeof params.callback != 'undefined') params.callback({success:true}, xml.responseText);
+				if (typeof params.callback != 'undefined') params.callback(null, xml.responseText);
 				return xml.responseText;
 			} else if(xml.status == 0) {
 				if(params.debug) console.log("XMl Error: readyState: ", xml.readyState, " status:", xml.status);
