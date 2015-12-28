@@ -163,6 +163,16 @@ function addSlot(JsonAnswer, cD)//adds a slot from Json answer into the crypto-d
 	}
 }
 /************* utilities **************************************/
+function returnPropByName(cD, name)
+{
+	for(var i=0;i<cD.properties.length;i++)
+	{
+		if (cD.properties[i].name == name)
+			return cD.properties[i];
+	} 
+	console.log("error, unexisting property");
+	return -1;
+}
 function addCd()// returns a new cd.
 {
 	var cD = new cryptoDevice(); 
@@ -210,10 +220,23 @@ function displayCd(id)//display a CD selected int the central panel
 																										}
 																			})(position)
 										);// add actions to the displayed div
-/*		for(var i = 0; i< cD.mngOperations.length;i++)
+
+		for(var i = 0; i< cD.properties.length;i++)
 		{
-			$("#cd-"+cD.id).children("#crt-"+i).click(cD.mngOperations[i].action); // add all operation interactions
-		}*/	
+			switch(cD.properties[i].name)
+			{
+				case "Managment":
+					for(var j=0;j<cD.properties[i].mngOperations.length; j++)
+						$("#cd-"+cD.id+" #mng-"+j).click(cD.properties[i].mngOperations[j].action); // add all operation interactions
+				break;
+				case "Crypto-Operations":
+					for(var j=0;j<cD.properties[i].crtOperations.length; j++)
+						$("#cd-"+cD.id+" #crt-"+j).click(cD.properties[i].crtOperations[j].action); // add all operation interactions
+				break;
+			}
+			
+			
+		}	
 		$('.collapsible').collapsible({
       							accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
     									});
