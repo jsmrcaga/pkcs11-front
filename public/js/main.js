@@ -3,7 +3,7 @@
 /* ################################################ */
 
 /* Objects definitions */
-function slot(id, hardwareSlot, manufacturerID, removableDevice, slotDescription, tokenPresent)
+function info(id, hardwareSlot, manufacturerID, removableDevice, slotDescription, tokenPresent)
 {
 	this.id=id;
 	this.hardwareSlot = hardwareSlot;
@@ -12,7 +12,7 @@ function slot(id, hardwareSlot, manufacturerID, removableDevice, slotDescription
 	this.slotDescription = slotDescription;
 	this.tokenPresent = tokenPresent;
 	this.display = function display(){ //return text pannel with fields of the slot. the id of this device is "sl-*its number*"	
-		var res = "<li><div class='collapsible-header'> slot " + this.id+"</div>";
+		var res = "<li><div class='collapsible-header'>Device informations</div>";
         res += "<div class='collapsible-body'><table class='striped '><thead><tr><th data-field='id'>Name</th><th data-field='name'>Value</th></tr></thead><tbody>";
 		for(e in this)
 		{
@@ -30,22 +30,22 @@ function slot(id, hardwareSlot, manufacturerID, removableDevice, slotDescription
 function cryptoDevice()
 {
 	this.id = singleId();
-	this.slots =new Array();
-	this.nbSlots = function _nbSlots(){ return this.slots.length;};
+	this.properties =new Array();
+	this.nbSlots = function _nbSlots(){ return this.properties.length;};
 	this.display = function _display(){
 		var res ="<div class='col s3' id='cd-"+this.id+"'>";
-		res +="<div class ='card-panel'> Crytpo device "+ this.id;
+		res +="<div class ='card-panel'> Slot "+ this.id;
 		res += "<a href='#' class='secondary-content'><i class='material-icons' id='rd-cd-"+this.id+"'>remove</i></a></div>"; 	// reduce button
 		res += "<div><ul class='collapsible' data-collapsible='accordion'>";
 		for(var i=0; i<this.nbSlots(); i++)
 		{
-			res += this.slots[i].display();
+			res += this.properties[i].display();
 		}
 		res +="</ul></div>";
 		return res;
 	}
 	this.push = function _pushSlot(slot){
-		this.slots.push(slot);
+		this.properties.push(slot);
 		var t = $("#cd-"+this.id);
 		if(t.length!=0)
 		{
@@ -221,7 +221,7 @@ function testCd(nb)// test function that display a random cD into the central pa
 {
 	 if (typeof(nb)==='undefined') nb = 1;
 	var cD = new cryptoDevice();
-	sl = new slot();
+	sl = new info();
 	sl.id=nb;
 	sl.hardwareSlot = "yes";
 	sl.manufacturerID = "yes";
@@ -247,13 +247,8 @@ function testCd(nb)// test function that display a random cD into the central pa
 	testCd(1);
 	testCd(1);
 	testCd(1); // just for testing functionalities
-	sl = new slot();
-	sl.id=2;
-	sl.hardwareSlot = "yes";
-	sl.manufacturerID = "yes";
-	sl.removableDevice = "yes"
-	sl.slotDescription  = "yes";
-	sl.tokenPresent = "yes";
-	cdList[0].push(sl);
+	// sl = new Array();
+	// sl.functional="yes";
+	// sl.display = function _disp(){return sl.functional};
+	// cdList[0].push(sl);
 	actualizeList();
-
