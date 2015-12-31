@@ -162,6 +162,32 @@ Object.defineProperty(Math.map, "types", {
 	}
 });
 
+Math.die = function(sides){
+	this.sides = sides;
+
+	this.roll = function(){
+		return Math.ceil(Math.random() * this.sides);
+	}
+};
+
+Math.roll_die = function _rollDie (number, sides){
+	if(typeof number == "undefined"){
+		number = 1;
+	}
+
+	if(typeof sides == "undefined"){
+		sides = 6;
+	}
+
+	var sum = 0;
+	for(var i = 0; i < number; i++){
+		sum += Math.ceil(Math.random() * sides);
+	}
+
+	return sum;
+};
+
+
 /**
  * Mathematical Sum
  * @param {int} from - First value of sum
@@ -206,14 +232,41 @@ Math.mult = function _mathMult(from, to, formula, step){
 	return res;
 };
 
+/********************************
+			FORMS
+********************************/
+Object.defineProperty(HTMLFormElement.prototype, "validate", {
+	enumerable:false,
+	value: function(){
+		var els = [];
+		for(var i = 0; i < this.elements.length; i++){
+			if(this.elements[i].getAttribute("optional") == true || this.elements[i].getAttribute("optional") == "") continue;
+			els.push(this.elements[i]);
+			this.elements[i].style.outline = "none";
+		}
+
+		for(var i = 0; i < els.length; i++){
+			if(els[i].value == ""){
+				els[i].style.outline = "#c62828 solid 1px";
+				return false;
+			}
+		}
+
+		return true;
+
+	}
+});
+
+
 //AJAX
 
 XMLHttpRequest.prototype.setRequestHeaders = function _setRequestHeaders(rh, defaultCT){
 	if(!defaultCT) defaultCT = 'application/json';
-	if(! "Content-Type" in rh) this.setRequestHeader("Content-Type", defaultCT);
+	if(! ("Content-Type" in rh)) {
+		this.setRequestHeader("Content-Type", defaultCT);
+	}
 
 	for(var header in rh){
-		console.info("Setting header: ", header, rh[header]);
 		this.setRequestHeader(header, rh[header]);
 	}
 }

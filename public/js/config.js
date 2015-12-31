@@ -9,7 +9,7 @@ var app = {
 	config: config,
 	paths:{
 		history: [],
-		current: ""
+		current: "/usr/local/lib/softhsm/libsofthsm2.so"
 	}
 };
 
