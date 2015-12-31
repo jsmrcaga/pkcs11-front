@@ -47,7 +47,7 @@ function managment(listOfPossibleActions)
 		for(var i=0;i< this.mngOperations.length;i++)
 		{
 
-				res +="<tr><td><input type='submit' id='mng-"+i+"' value='"+this.mngOperations[i].name+"'></input></td></tr>";
+				res +="<tr><td><input type='submit' class='btn' id='mng-"+i+"' value='"+this.mngOperations[i].name+"'></input></td></tr>";
 			
 			
 		}
@@ -70,7 +70,7 @@ function cryptOperations(listOfPossibleActions)
 		for(var i=0;i< this.crtOperations.length;i++)
 		{
 
-				res +="<tr><td><input type='submit' id='crt-"+i+"' value='"+this.crtOperations[i].name+"'></input></td></tr>";	
+				res +="<tr><td><input type='submit' class='btn' id='crt-"+i+"' value='"+this.crtOperations[i].name+"'></input></td></tr>";	
 
 			
 		}
@@ -214,12 +214,12 @@ function displayCd(id)//display a CD selected int the central panel
 		console.log(tmp);
 		$('#display-panel').append(cD.display());
 		$("#rd-cd-"+cD.id).click((function _clicRm(index){
-																			return function _undispCd()
-																										{
-																											unDisplayCd(cdList[index].id);
-																										}
-																			})(position)
-										);// add actions to the displayed div
+			return function _undispCd()
+			{
+				unDisplayCd(cdList[index].id);
+																		}
+			})(position)
+		);// add actions to the displayed div
 
 		for(var i = 0; i< cD.properties.length;i++)
 		{
@@ -305,10 +305,11 @@ function testCd(nb)// test function that display a random cD into the central pa
 	sl.slotDescription  = "yes";
 	sl.tokenPresent = "yes";
 	cD.push(sl);
-	act = new action("toast", toastMe)
+	act = new action("toast", function(){toastMe("management op")});
+	var act2 = new action("toast2", function(){toastMe("cryptoOp")});
 	mg = new managment(act);
 	cD.push(mg);
-	cO = new cryptOperations(act);
+	cO = new cryptOperations(act2);
 	cD.push(cO);
 	cdList.push(cD);
 	displayCd(cD.id);
@@ -326,9 +327,9 @@ function testCd(nb)// test function that display a random cD into the central pa
   });
 /* testing functionnalites, debug  */
 
-function toastMe()
+function toastMe(text)
 {
-	Materialize.toast("it's a toast !", 4000);
+	Materialize.toast(text, 4000);
 }
 	testCd(1);
 	testCd(1);
