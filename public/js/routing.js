@@ -4,8 +4,15 @@ config.routing = {
 		slots:{
 			path: "/slot",
 			number: "/slot/nbSlot",
-			id: function _slotId(id){
-				return "/slot/"+id;
+			id: function _slotId(id, select){
+				if (!select) select = "*";
+				return "/slot/"+id + " /info?select=" + select;
+			}
+		},
+		tokens:{
+			id: function  _tokenId(id, select){
+				if (!select) select = "*";
+				return "/token/" + id + " /info?select=" + select;
 			}
 		}
 	}
@@ -28,10 +35,10 @@ function getSlotNumber(callback) {
 	Workshop.ajax(options);
 }
 
-function getSlot(id, callback){
+function getSlot(id, select, callback){
 	var options = {
 		// for the moment select = *
-		url: config.routing.host + config.routing.api.slots.id(id) + "/info?select=*",
+		url: config.routing.host + config.routing.api.slots.id(id, select) + "/info?select=*",
 		method: "POST",
 		data: {
 			path: app.paths.current
@@ -42,10 +49,20 @@ function getSlot(id, callback){
 	Workshop.ajax(options);
 }
 
+function getToken(id, select, callback){
+	var options = {
+		url: config.routing.host + config.routing.api.tokens.id(id, select),
+	};
+
+	Workshop.ajax(options);
+}
 
 app.routing = {
 	slots:{
 		getSlotNumber : getSlotNumber,
 		getSlot: getSlot
+	},
+	tokens:{
+		getToken: getToken
 	}
 }
