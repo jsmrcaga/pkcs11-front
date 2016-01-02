@@ -5,6 +5,7 @@ function init () {
 			return;
 		} 
 
+		nb = JSON.parse(nb).nbSlot;
 		init_getSlots(nb);
 	});
 }
@@ -17,6 +18,7 @@ function init_getSlots(nb){
 					console.error(err);
 					return;
 				}
+				console.log("Got slot, adding: ", slot);
 
 				var cd = addCd();
 				addSlotDescription(slot, cd);

@@ -141,7 +141,7 @@ function singleId()
 function addSlotDescription(JsonAnswer, cD)//adds a slot from Json answer into the crypto-device
 {
 	//create the object
-	var sl = new slot();
+	var sl = new info();
 	//create 
 	var tmp = JSON.parse(JsonAnswer);
 	sl.hardwareSlot = tmp.hardwareSlot;
@@ -154,12 +154,14 @@ function addSlotDescription(JsonAnswer, cD)//adds a slot from Json answer into t
 	// actualize collapsed list
 	actualizeList();
 	//actualize display in central pannel if there
-	var t = $("#cd-"+id);
-	if(t.length!=0)
+	var id_string = "#cd-" + cD.id;
+	console.log(id_string); 
+	var t = $(id_string);
+	if(t.length != 0)
 	{
 		//element already displayed
-		unDisplayCd(cD)
-		displayCd(cD);
+		unDisplayCd(cD.id);
+		displayCd(cD.id);
 	}
 }
 /************* utilities **************************************/
@@ -177,7 +179,7 @@ function addCd()// returns a new cd.
 {
 	var cD = new cryptoDevice(); 
 	cdList.push(cD);
-	displayCd(cD.id);
+	// displayCd(cD.id);
 	actualizeList();
 	return cD;
 }
@@ -331,9 +333,9 @@ function toastMe(text)
 {
 	Materialize.toast(text, 4000);
 }
-	testCd(1);
-	testCd(1);
-	testCd(1); // just for testing functionalities
+	// testCd(1);
+	// testCd(1);
+	// testCd(1); // just for testing functionalities
 	// sl = new Array();
 	// sl.functional="yes";
 	// sl.display = function _disp(){return sl.functional};
