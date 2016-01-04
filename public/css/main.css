@@ -13,3 +13,11 @@
 	font-family: 'Helvetica';
 	font-weight: bold;
 }
+
+td, th {
+	padding-left: 15px;
+}
+
+.italics{
+	font-style: italic;
+}

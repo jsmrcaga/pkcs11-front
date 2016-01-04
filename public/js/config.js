@@ -1,6 +1,8 @@
 // general config
 var config = {
-
+	display: {
+		token: "token-display-table"
+	}
 };
 
 // App config
@@ -9,7 +11,7 @@ var app = {
 	config: config,
 	paths:{
 		history: [],
-		current: ""
+		current: "/usr/local/lib/softhsm/libsofthsm2.so"
 	}
 };
 

@@ -17,8 +17,8 @@
 
 <ul id="slide-out" class="side-nav fixed">
 	<img src="public/img/logo.png" class="menu-logo">
-	<li><a href="#modal_newCrypto" class="modal-trigger"><i class="material-icons">add</i>Load Module</a></li>
-	<li><a href="#modal_cryptoList" class="modal-trigger"><i class="material-icons">book</i>Loaded Devices</a></li>
+	<li><a href="#modal_cryptoList" class="modal-trigger"><i class="material-icons">book</i> Loaded Devices</a></li>
+	<li><a href="#modal_newCrypto" class="modal-trigger"><i class="material-icons">add</i> Load Module</a></li>
 </ul>
 <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
 
@@ -91,10 +91,35 @@
 	</div>
 </div>
 
+<div class="modal" id="token_modal">
+	<div class="modal-content">
+		<h4>Token Description</h4>
+		<table id="token-display-table" class="responsive-table">
+			<thead>
+				<tr>
+					<th>Key</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="modal" id="loading_modal">
+	<div class="modal-content">
+		<h4></h4>		
+		<img src="public/img/loading.gif">
+	</div>	
+</div>
+
 </body>
 <!-- loading libraries -->
 <script type="text/javascript" src="public/js/lib/jquery.js"></script>
 <script type="text/javascript" src="public/js/lib/materialize.js"></script>
 <!-- loading our js -->
 <script type="text/javascript" src="public/js/main.js"></script>
+<script type="text/javascript" src="public/js/init.js"></script>
 </html>

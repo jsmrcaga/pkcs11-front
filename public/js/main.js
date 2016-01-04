@@ -47,7 +47,7 @@ function managment(listOfPossibleActions)
 		for(var i=0;i< this.mngOperations.length;i++)
 		{
 
-				res +="<tr><td><input type='submit' id='mng-"+i+"' value='"+this.mngOperations[i].name+"'></input></td></tr>";
+				res +="<tr><td><input type='submit' class='btn' id='mng-"+i+"' value='"+this.mngOperations[i].name+"'></input></td></tr>";
 			
 			
 		}
@@ -70,7 +70,7 @@ function cryptOperations(listOfPossibleActions)
 		for(var i=0;i< this.crtOperations.length;i++)
 		{
 
-				res +="<tr><td><input type='submit' id='crt-"+i+"' value='"+this.crtOperations[i].name+"'></input></td></tr>";	
+				res +="<tr><td><input type='submit' class='btn' id='crt-"+i+"' value='"+this.crtOperations[i].name+"'></input></td></tr>";	
 
 			
 		}
@@ -144,7 +144,7 @@ function singleId()
 function addSlotDescription(JsonAnswer, cD)//adds a slot from Json answer into the crypto-device
 {
 	//create the object
-	var sl = new slot();
+	var sl = new info(singleId());
 	//create 
 	var tmp = JSON.parse(JsonAnswer);
 	sl.hardwareSlot = tmp.hardwareSlot;
@@ -157,12 +157,14 @@ function addSlotDescription(JsonAnswer, cD)//adds a slot from Json answer into t
 	// actualize collapsed list
 	actualizeList();
 	//actualize display in central pannel if there
-	var t = $("#cd-"+id);
-	if(t.length!=0)
+	var id_string = "#cd-" + cD.id;
+	console.log(id_string); 
+	var t = $(id_string);
+	if(t.length != 0)
 	{
 		//element already displayed
-		unDisplayCd(cD)
-		displayCd(cD);
+		unDisplayCd(cD.id);
+		displayCd(cD.id);
 	}
 }
 /************* utilities **************************************/
@@ -180,7 +182,7 @@ function addCd()// returns a new cd.
 {
 	var cD = new cryptoDevice(); 
 	cdList.push(cD);
-	displayCd(cD.id);
+	// displayCd(cD.id);
 	actualizeList();
 	return cD;
 }
@@ -217,12 +219,12 @@ function displayCd(id)//display a CD selected int the central panel
 		console.log(tmp);
 		$('#display-panel').append(cD.display());
 		$("#rd-cd-"+cD.id).click((function _clicRm(index){
-																			return function _undispCd()
-																										{
-																											unDisplayCd(cdList[index].id);
-																										}
-																			})(position)
-										);// add actions to the displayed div
+			return function _undispCd()
+			{
+				unDisplayCd(cdList[index].id);
+			}
+			})(position)
+		);// add actions to the displayed div
 
 		for(var i = 0; i< cD.properties.length;i++)
 		{
@@ -241,9 +243,48 @@ function displayCd(id)//display a CD selected int the central panel
 			
 		}	
 		$('.collapsible').collapsible({
-      							accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-    									});
+      		accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    	});
 	}	
+}
+
+function Token(){}
+
+Object.defineProperty(Token.prototype, "display", {
+	enumerable: false,
+	value: function _displayToken(){
+		var table = document.getElementById(config.display.token).children[1];
+		table.innerHTML = "";
+		for(var key in this){
+			var tr = document.createElement("tr");
+			var t_key = document.createElement("td");
+				t_key.className = "italics";
+				t_key.innerHTML = key;
+
+			var t_value = document.createElement("td");
+				t_value.innerHTML = this[key];
+
+			tr.appendChild(t_key);
+			tr.appendChild(t_value);
+
+			table.appendChild(tr);
+		}
+
+		$("#token_modal").openModal();
+	}
+});
+
+
+function tokenFactory(json){
+	var data = JSON.parse(json);
+	var token = new Token();
+
+	for(var key in data){
+		// copy all elements from json answer to token
+		token[key] = data[key];
+	}
+
+	return token;
 }
 
 function unDisplayCd(id)//remove CD selected int the central panel
@@ -308,10 +349,11 @@ function testCd(nb)// test function that display a random cD into the central pa
 	sl.slotDescription  = "yes";
 	sl.tokenPresent = "yes";
 	cD.push(sl);
-	act = new action("toast", toastMe)
+	act = new action("toast", function(){toastMe("management op")});
+	var act2 = new action("toast2", function(){toastMe("cryptoOp")});
 	mg = new managment(act);
 	cD.push(mg);
-	cO = new cryptOperations(act);
+	cO = new cryptOperations(act2);
 	cD.push(cO);
 	cdList.push(cD);
 	displayCd(cD.id);
@@ -329,13 +371,13 @@ function testCd(nb)// test function that display a random cD into the central pa
   });
 /* testing functionnalites, debug  */
 
-function toastMe()
+function toastMe(text)
 {
-	Materialize.toast("it's a toast !", 4000);
+	Materialize.toast(text, 4000);
 }
-	testCd(1);
-	testCd(1);
-	testCd(1); // just for testing functionalities
+	// testCd(1);
+	// testCd(1);
+	// testCd(1); // just for testing functionalities
 	// sl = new Array();
 	// sl.functional="yes";
 	// sl.display = function _disp(){return sl.functional};
