@@ -79,7 +79,7 @@ function cryptOperations(listOfPossibleActions)
 		return res;
 	}
 }
-function cryptoDevice()
+function cryptoDevice()// to see like an actual slot
 {
 	this.id = singleId();
 	this.properties =new Array();
@@ -235,6 +235,11 @@ function displayCd(id)//display a CD selected int the central panel
 					for(var j=0;j<cD.properties[i].crtOperations.length; j++)
 						$("#cd-"+cD.id+" #crt-"+j).click(cD.properties[i].crtOperations[j].action); // add all operation interactions
 				break;
+				case "token":
+					for(var j=0;j<cD.properties[i].crtOperations.length; j++)
+						$("#cd-"+cD.id+" .token").click(cD.properties[i].modalDisplay); // add all operation interactions
+				break;
+
 			}
 			
 			
@@ -245,7 +250,8 @@ function displayCd(id)//display a CD selected int the central panel
 	}	
 }
 
-function Token(){}
+function Token(){
+}
 
 Object.defineProperty(Token.prototype, "displayModal", {
 	enumerable: false,
@@ -284,6 +290,10 @@ Object.defineProperty(Token.prototype, "display", {
 	}
 });
 
+Object.defineProperty(Token.prototype, "name", {
+	enumerable:false,
+	value:"token"
+});
 
 
 function tokenFactory(json){
