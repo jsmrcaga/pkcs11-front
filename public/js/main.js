@@ -79,7 +79,7 @@ function cryptOperations(listOfPossibleActions)
 		return res;
 	}
 }
-function cryptoDevice()
+function cryptoDevice()// to see like an actual slot
 {
 	this.id = singleId();
 	this.properties =new Array();
@@ -106,7 +106,10 @@ function cryptoDevice()
 			displayCd(this.id);
 		}
 	}
-
+function token(JsonAnswer)
+{
+	this.properties = JSON.parse(JsonAnswer);
+}
 
 
 }
