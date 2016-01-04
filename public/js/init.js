@@ -28,3 +28,12 @@ function init_getSlots(nb){
 		})(i));
 	}
 }
+
+app.routing.setPath(function(err, res, xml){
+	console.log("Got session id:");
+	if(res == "") throw new Error("Did not get Session ID");
+	res = JSON.parse(res);
+	config.routing.api.so_path.jsession = res.jsessionid;
+
+	init();
+});

@@ -293,11 +293,11 @@ function AJAXCall (params){
 		if(xml.readyState == 4){
 			if (xml.status == (params.status || 200)){
 				//readyState 4 = end of call and success
-				if (typeof params.callback != 'undefined') params.callback(null, xml.responseText);
+				if (typeof params.callback != 'undefined') params.callback(null, xml.responseText, xml);
 				return xml.responseText;
 			} else if(xml.status == 0) {
 				if(params.debug) console.log("XMl Error: readyState: ", xml.readyState, " status:", xml.status);
-				if (typeof params.callback != 'undefined') params.callback({error: {message: xml.statusText, state: xml.readyState, status: xml.status}}, xml.responseText);				
+				if (typeof params.callback != 'undefined') params.callback({error: {message: xml.statusText, state: xml.readyState, status: xml.status}}, xml.responseText, xml);				
 			}
 		}
 	};

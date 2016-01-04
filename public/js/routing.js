@@ -1,25 +1,26 @@
 config.routing = {
-	// host: "http://172.25.28.190:8080/pkcs11-api/webapi",
-	host: "http://lamouri.no-ip.biz:8080/pkcs11-api/webapi",
+	host: "http://92.222.5.101:8080/pkcs11-api/webapi",
+	// host: "http://lamouri.no-ip.biz:8080/pkcs11-api/webapi",
 	api:{
 		so_path:{
-			endpoint: "/module"
+			endpoint: "/module",
+			jsession:null,
 		},
 		slots:{
 			path: "/slot",
 			number: "/slot/nbSlot",
 			id: function _slotId(id, select){
 				if (!select) select = "*";
-				return "/slot/"+id + "/info?select=" + select;
+				return "/slot/"+id + "/info;jsessionid=" + config.routing.api.so_path.jsession + "?select=" + select;
 			}
 		},
 		tokens:{
 			id: function  _tokenId(id, select){
 				if (!select) select = "*";
-				return "/token/" + id + "/info?select=" + select;
+				return "/token/" + id + "/info;jsessionid=" + config.routing.api.so_path.jsession + "?select=" + select;
 			},
 			init: function _tokenInit(id){
-				return "/token/"+ id +"/init"
+				return "/token/"+ id +"/init;jsessionid=" + config.routing.api.so_path.jsession // mechanisms works
 			}
 		}
 	}
@@ -35,7 +36,7 @@ function setPath(callback){
 			path: app.paths.current
 		},
 		callback: callback,
-		status: 204,
+
 	};
 
 	Workshop.ajax(options);
@@ -43,9 +44,12 @@ function setPath(callback){
 
 function getSlotNumber(callback) {
 	var options = {
-		url: config.routing.host + config.routing.api.slots.number,
+		url: config.routing.host + config.routing.api.slots.number + ";jsessionid=" + config.routing.api.so_path.jsession,
 		method: "GET",
-		callback:callback
+		callback:callback,
+		// rh: {
+		// 	"SET-COOKIE" : "JSESSOINID=" + config.routing.api.so_path.jsession + ";Path=/ HttpOnly",
+		// }
 	};
 
 	Workshop.ajax(options);
@@ -56,7 +60,10 @@ function getSlot(id, callback, select){
 		// for the moment select = *
 		url: config.routing.host + config.routing.api.slots.id(id, select),
 		method: "GET",
-		callback:callback
+		callback:callback,
+		// rh: {
+		// 	"SET-COOKIE" : "JSESSOINID=" + config.routing.api.so_path.jsession + ";Path=/ HttpOnly",
+		// }
 	};
 
 	Workshop.ajax(options);
@@ -66,7 +73,10 @@ function getToken(id, callback, select){
 	var options = {
 		url: config.routing.host + config.routing.api.tokens.id(id, select),
 		method: "GET",
-		callback:callback
+		callback:callback,
+		// rh: {
+		// 	"SET-COOKIE" : "JSESSOINID=" + config.routing.api.so_path.jsession + ";Path=/ HttpOnly",
+		// }
 	};
 
 	Workshop.ajax(options);
@@ -80,11 +90,12 @@ function initToken(id, label, pin, callback){
 	data.label = label;
 
 	var options = {
-		method: "POST",
+		method: "PUT",
 		data: data,
 		url : config.ruting.host + config.routing.api.tokens.init(id),
 		callback: callback,
-		status: 204
+		status: 204,
+		
 	};
 
 	Workshop.ajax(options);
