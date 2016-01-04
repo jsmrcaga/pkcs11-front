@@ -33,7 +33,8 @@ function init_getSlots(nb){
 						cd.push(token);
 						console.log("Added to cd:", cd);
 						$("#loading_modal").closeModal();
-						Materialize.toast("Module loaded succesfully!", 3000);
+						Materialize.toast("Module loaded succesfully!", 3000, "toast-success");
+						displayCd(cd.id);
 					});
 
 				}
@@ -46,7 +47,12 @@ function init_getSlots(nb){
 
 
 function loadModule (path) {
-	if(app.paths.history.indexOf(path) < 0) app.paths.history.push(path);
+	if(app.paths.history.indexOf(path) < 0) {
+		app.paths.history.push(path);
+	}else{
+		Materialize.toast("Module already loaded!", 3000, "toast-fail");
+		return;
+	}
 	app.paths.current = path;
 
 	$("#loading_modal").openModal();
@@ -65,9 +71,11 @@ document.getElementById("button_load_module").addEventListener("click", function
 	e.preventDefault();
 	var path = document.getElementById("path_to_so");
 	if (path.value == "") {
-		path.style.outline = "#AA0000 solid 1px"; 
+		path.style.outline = "#AA0000 solid 2px";
+		Materialize.toast("Please specify a path to the module");
 		return;
 	}
 
+	$("#modal_newCrypto").closeModal();
 	loadModule(path.value); 
 });

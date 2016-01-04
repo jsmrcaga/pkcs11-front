@@ -26,3 +26,11 @@ td, th {
 	display: block;
 	margin: 0 auto;
 }
+
+.toast-success{
+	background-color: #66bb6a ;
+}
+
+.toast-fail{
+	background-color: #ef5350;
+}
