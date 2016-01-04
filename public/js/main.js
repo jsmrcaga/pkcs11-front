@@ -106,10 +106,7 @@ function cryptoDevice()// to see like an actual slot
 			displayCd(this.id);
 		}
 	}
-function token(JsonAnswer)
-{
-	this.properties = JSON.parse(JsonAnswer);
-}
+
 
 
 }
@@ -238,6 +235,11 @@ function displayCd(id)//display a CD selected int the central panel
 					for(var j=0;j<cD.properties[i].crtOperations.length; j++)
 						$("#cd-"+cD.id+" #crt-"+j).click(cD.properties[i].crtOperations[j].action); // add all operation interactions
 				break;
+				case "token":
+					for(var j=0;j<cD.properties[i].crtOperations.length; j++)
+						$("#cd-"+cD.id+" .token").click(cD.properties[i].modalDisplay); // add all operation interactions
+				break;
+
 			}
 			
 			
@@ -248,7 +250,8 @@ function displayCd(id)//display a CD selected int the central panel
 	}	
 }
 
-function Token(){}
+function Token(){
+}
 
 Object.defineProperty(Token.prototype, "display", {
 	enumerable: false,
@@ -273,6 +276,15 @@ Object.defineProperty(Token.prototype, "display", {
 		$("#token_modal").openModal();
 	}
 });
+
+Object.defineProperty(Token.prototype, "name", {
+	enumerable:false,
+	value:"token"
+});
+
+
+
+
 
 
 function tokenFactory(json){

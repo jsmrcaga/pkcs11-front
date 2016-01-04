@@ -22,6 +22,17 @@ function init_getSlots(nb){
 
 				var cd = addCd();
 				addSlotDescription(slot, cd);
+				if(cd.properties[0].tokenPresent == "yes")
+				{
+					//if token is there, add the pinche token description to the properties
+
+					app.routing.tokens.getToken(0, function (err, res) {
+						var token = tokenFactory(res);
+						cd.push(token);
+					})
+					toastMe();
+
+				}
 			}
 
 
