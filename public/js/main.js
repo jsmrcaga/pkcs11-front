@@ -247,7 +247,7 @@ function displayCd(id)//display a CD selected int the central panel
 
 function Token(){}
 
-Object.defineProperty(Token.prototype, "display", {
+Object.defineProperty(Token.prototype, "displayModal", {
 	enumerable: false,
 	value: function _displayToken(){
 		var table = document.getElementById(config.display.token).children[1];
@@ -270,6 +270,20 @@ Object.defineProperty(Token.prototype, "display", {
 		$("#token_modal").openModal();
 	}
 });
+
+Object.defineProperty(Token.prototype, "display", {
+	enumerable: false,
+	value: function(){
+		var div = document.createElement("div");
+			div.className = "collapsible-header";
+			div.innerHTML = "Token Informations";
+		var li = document.createElement("li");
+		li.className = "token";
+		li.appendChild(div);
+		return li.outerHTML;
+	}
+});
+
 
 
 function tokenFactory(json){
