@@ -1,4 +1,4 @@
-function init () {
+function module_getSlotNumber () {
 	app.routing.slots.getSlotNumber(function (err, nb){
 		if(err){
 			console.error(err);
@@ -32,7 +32,8 @@ function init_getSlots(nb){
 						console.log("Adding to cd...");
 						cd.push(token);
 						console.log("Added to cd:", cd);
-						toastMe();
+						$("#loading_modal").closeModal();
+						Materialize.toast("Module loaded succesfully!", 3000);
 					});
 
 				}
@@ -43,11 +44,30 @@ function init_getSlots(nb){
 	}
 }
 
-app.routing.setPath(function(err, res, xml){
-	console.log("Got session id:");
-	if(res == "") throw new Error("Did not get Session ID");
-	res = JSON.parse(res);
-	config.routing.api.so_path.jsession = res.jsessionid;
 
-	init();
+function loadModule (path) {
+	if(app.paths.history.indexOf(path) < 0) app.paths.history.push(path);
+	app.paths.current = path;
+
+	$("#loading_modal").openModal();
+	app.routing.setPath(function(err, res, xml){
+		console.log("Got session id:");
+		if(res == "") throw new Error("Did not get Session ID");
+		res = JSON.parse(res);
+		config.routing.api.so_path.jsession = res.jsessionid;
+
+		module_getSlotNumber();
+	});
+	
+}
+
+document.getElementById("button_load_module").addEventListener("click", function(e){
+	e.preventDefault();
+	var path = document.getElementById("path_to_so");
+	if (path.value == "") {
+		path.style.outline = "#AA0000 solid 1px"; 
+		return;
+	}
+
+	loadModule(path.value); 
 });

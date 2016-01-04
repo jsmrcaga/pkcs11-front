@@ -21,3 +21,8 @@ td, th {
 .italics{
 	font-style: italic;
 }
+
+#loading_modal img{
+	display: block;
+	margin: 0 auto;
+}
