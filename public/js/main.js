@@ -236,8 +236,7 @@ function displayCd(id)//display a CD selected int the central panel
 						$("#cd-"+cD.id+" #crt-"+j).click(cD.properties[i].crtOperations[j].action); // add all operation interactions
 				break;
 				case "token":
-					for(var j=0;j<cD.properties[i].crtOperations.length; j++)
-						$("#cd-"+cD.id+" .token").click(cD.properties[i].modalDisplay); // add all operation interactions
+						$("#cd-"+cD.id+" .token").click(cD.properties[i].displayModal.bind(cD.properties[i])); // add all operation interactions
 				break;
 
 			}
