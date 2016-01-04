@@ -1,5 +1,6 @@
 config.routing = {
-	host: "http://92.222.5.101:8080/pkcs11-api/webapi",
+	// host: "http://172.25.28.190:8080/pkcs11-api/webapi",
+	host: "http://lamouri.no-ip.biz:8080/pkcs11-api/webapi",
 	api:{
 		so_path:{
 			endpoint: "/module"
@@ -33,7 +34,8 @@ function setPath(callback){
 		data:{
 			path: app.paths.current
 		},
-		callback: callback
+		callback: callback,
+		status: 204,
 	};
 
 	Workshop.ajax(options);
