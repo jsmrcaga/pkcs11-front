@@ -18,19 +18,22 @@ function init_getSlots(nb){
 					console.error(err);
 					return;
 				}
-				console.log("Got slot, adding: ", slot);
+				console.log("Got slot, adding: ", JSON.parse(slot));
 
 				var cd = addCd();
 				addSlotDescription(slot, cd);
-				if(cd.properties[0].tokenPresent == "yes")
-				{
+				if(cd.properties[0].tokenPresent == true){
 					//if token is there, add the pinche token description to the properties
 
 					app.routing.tokens.getToken(0, function (err, res) {
+						console.info("Got token", JSON.parse(res));
 						var token = tokenFactory(res);
+						console.log("Token from factory", token);
+						console.log("Adding to cd...");
 						cd.push(token);
+						console.log("Added to cd:", cd);
+						toastMe();
 					});
-					toastMe();
 
 				}
 			}
