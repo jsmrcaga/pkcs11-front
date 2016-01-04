@@ -17,3 +17,7 @@
 td, th {
 	padding-left: 15px;
 }
+
+.italics{
+	font-style: italic;
+}

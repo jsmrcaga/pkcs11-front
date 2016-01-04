@@ -1,6 +1,8 @@
 // general config
 var config = {
-
+	display: {
+		token: "token-display-table"
+	}
 };
 
 // App config

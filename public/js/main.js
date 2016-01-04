@@ -141,7 +141,7 @@ function singleId()
 function addSlotDescription(JsonAnswer, cD)//adds a slot from Json answer into the crypto-device
 {
 	//create the object
-	var sl = new info();
+	var sl = new info(singleId());
 	//create 
 	var tmp = JSON.parse(JsonAnswer);
 	sl.hardwareSlot = tmp.hardwareSlot;
@@ -219,7 +219,7 @@ function displayCd(id)//display a CD selected int the central panel
 			return function _undispCd()
 			{
 				unDisplayCd(cdList[index].id);
-																		}
+			}
 			})(position)
 		);// add actions to the displayed div
 
@@ -240,9 +240,48 @@ function displayCd(id)//display a CD selected int the central panel
 			
 		}	
 		$('.collapsible').collapsible({
-      							accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-    									});
+      		accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    	});
 	}	
+}
+
+function Token(){}
+
+Object.defineProperty(Token.prototype, "display", {
+	enumerable: false,
+	value: function _displayToken(){
+		var table = document.getElementById(config.display.token).children[1];
+		table.innerHTML = "";
+		for(var key in this){
+			var tr = document.createElement("tr");
+			var t_key = document.createElement("td");
+				t_key.className = "italics";
+				t_key.innerHTML = key;
+
+			var t_value = document.createElement("td");
+				t_value.innerHTML = this[key];
+
+			tr.appendChild(t_key);
+			tr.appendChild(t_value);
+
+			table.appendChild(tr);
+		}
+
+		$("#token_modal").openModal();
+	}
+});
+
+
+function tokenFactory(json){
+	var data = JSON.parse(json);
+	var token = new Token();
+
+	for(var key in data){
+		// copy all elements from json answer to token
+		token[key] = data[key];
+	}
+
+	return token;
 }
 
 function unDisplayCd(id)//remove CD selected int the central panel
