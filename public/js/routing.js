@@ -11,20 +11,41 @@ config.routing = {
 			number: "/slot/nbSlot",
 			id: function _slotId(id, select){
 				if (!select) select = "*";
-				return "/slot/"+id + "/info;jsessionid=" + config.routing.api.so_path.jsession + "?select=" + select;
+				return "/slot/info/" + id + add_jsession() + "?select=" + select;
 			}
 		},
 		tokens:{
 			id: function  _tokenId(id, select){
 				if (!select) select = "*";
-				return "/token/" + id + "/info;jsessionid=" + config.routing.api.so_path.jsession + "?select=" + select;
+				return "/token/info/" + id + add_jsession() + "?select=" + select;
 			},
 			init: function _tokenInit(id){
-				return "/token/"+ id +"/init;jsessionid=" + config.routing.api.so_path.jsession // mechanisms works
+				return "/token/init/"+ id+ add_jsession() // mechanisms works
+			},
+
+			initUserPin: function _tokenInitPinU(id){
+				return "/token/initUserPin/" + id + add_jsession() // mechanisms works
+			},
+
+			reset: function _tokenreset(id){
+				return "/token/changePW/" + id + add_jsession()
+			},
+
+			mechanisms: function _tokenMech(id){
+				return "/token/mechanisms" + id + add_jsession(); 
+			},
+
+			login: function _tokenLogin(id){
+				return "/session/" + id + add_jsession()
 			}
 		}
 	}
 };
+
+function add_jsession(url){
+	if(typeof url == 'undefined') return ";jsessionid=" + config.routing.api.so_path.jsession;
+	return url + ";jsessionid=" + config.routing.api.so_path.jsession;
+}
 
 // CALLBACKS
 	// Callbacks MUST be fct(err, data). Error is sent first.
@@ -41,6 +62,7 @@ function setPath(callback){
 
 	Workshop.ajax(options);
 }
+
 
 function getSlotNumber(callback) {
 	var options = {
@@ -69,6 +91,20 @@ function getSlot(id, callback, select){
 	Workshop.ajax(options);
 }
 
+// *
+// @Tonio:
+	// remove from GUI 
+function deleteModule(callback){
+	var options= {
+		method:"DELETE",
+		url: config.routing.host + config.routing.api.so_path.endpoint + add_jsession(),
+		callback: callback,
+		status: 204
+	};
+
+	Workshop.ajax(options);
+}
+
 function getToken(id, callback, select){
 	var options = {
 		url: config.routing.host + config.routing.api.tokens.id(id, select),
@@ -85,19 +121,81 @@ function getToken(id, callback, select){
 
 function initToken(id, label, pin, callback){
 	var data = {};
-	data.pinSO = pin
-	data.path = app.paths.current;
+	data.pinSO = pin; //null if protected machin
 	data.label = label;
 
 	var options = {
 		method: "PUT",
 		data: data,
-		url : config.ruting.host + config.routing.api.tokens.init(id),
+		url : config.routing.host + config.routing.api.tokens.init(id),
 		callback: callback,
 		status: 204,
 		
 	};
 
+	Workshop.ajax(options);
+}
+
+// * ***
+function token_login(id, pin, userType, callback){
+	// pin = null if protectedAuthenticationPath = true;
+	// userType  =so / user
+	var options = {
+		method: "PUT",
+		url: config.routing.host + config.routing.api.tokens.login(id),
+		data: {
+			userType:userType,
+			pin: pin
+		},
+		status: 204,
+		callback: callback,
+	};
+
+	Workshop.ajax(options);
+}
+
+function token_logout(id, callback){
+	var options = {
+		method: "DELETE",
+		url: config.routing.host + config.routing.api.tokens.login(id),
+		callback: callback
+	};
+
+	Workshop.ajax(options);
+}
+
+function token_init_user_pin (id, pin, callback) {
+	//pin null if protected machin
+	var options = {
+		url: config.routing.host + config.routing.tokens.initUserPin(id),
+		method: "PUT",
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
+
+function token_reset (id, pinSo, label, callback) {
+	// logout before!
+		// checklogin
+	// pin null if machin
+
+	var options = {
+		url: config.routing.host + config.routing.tokens.reset(id),
+		method: "PUT",
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
+
+function token_mech (id, callback) {
+	var options = {
+		url: config.routing.host + config.routing.tokens.mechanisms,
+		method: "GET",
+		callback: callback
+	};
+	
 	Workshop.ajax(options);
 }
 
@@ -109,6 +207,11 @@ app.routing = {
 	},
 	tokens:{
 		getToken: getToken,
-		init : initToken
+		init : initToken,
+		login : token_login,
+		logout: token_logout,
+		initUserPin : token_init_user_pin,
+		reset: token_reset,
+		mechanisms: token_mech
 	}
-}
+};

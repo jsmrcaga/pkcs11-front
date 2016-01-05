@@ -12,6 +12,10 @@ var app = {
 	paths:{
 		history: [],
 		current: "/usr/local/lib/softhsm/libsofthsm2.so"
-	}
+	},
+
+	login_method: "so",
+	active_token: null,
+	logged_token: null
 };
 

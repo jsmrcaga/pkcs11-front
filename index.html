@@ -19,6 +19,13 @@
 	<img src="public/img/logo.png" class="menu-logo">
 	<li><a href="#modal_newCrypto" class="modal-trigger"><i class="material-icons">add</i> Load Module</a></li>
 	<li><a href="#modal_cryptoList" class="modal-trigger"><i class="material-icons">book</i> Loaded Devices</a></li>
+	<hr>
+	<h5 class="menu-title">Token Operations</h5>
+	<span class="span-logged" id="span-logged">Logged to token </span>
+	<li><a href="#!" id="button_token_login"><i class="material-icons">bookmark_border</i> Login</a></li>
+	<li><a href="#!" id="button_token_init"><i class="material-icons">fiber_new</i> Init Token</a></li>
+	<li><a href="#!" id="button_token_uPin"><i class="material-icons">assignment_ind</i> Init User Pin</a></li>
+	<li><a href="#!" id="button_token_reset"><i class="material-icons">autorenew</i> Reset Token</a></li>
 </ul>
 <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
 
@@ -71,22 +78,7 @@
 	<div class="modal-content">
 		<h4>List of Crypto Devices</h4>
 		<ul class="collection" id="crypto-list">
-			<li class="collection-item">
-				Alvin
-				<a href="" class="secondary-content"><i class="material-icons">check</i></a>
-			</li>
-			<li class="collection-item">
-				Alvin
-				<a href="" class="secondary-content"><i class="material-icons">check</i></a>
-			</li>
-			<li class="collection-item">
-				Alvin
-				<a href="" class="secondary-content"><i class="material-icons">check</i></a>
-			</li>
-			<li class="collection-item">
-				Alvin
-				<a href="" class="secondary-content"><i class="material-icons">check</i></a>
-			</li>
+			
 		</ul>
 	</div>
 </div>
@@ -115,11 +107,106 @@
 	</div>	
 </div>
 
+<div class="modal" id="token_select">
+	<div class="modal-content">
+		<select id="select_token_input">
+			<option value="" selected>Select Token</option>
+		</select>
+		<label>Select token to use</label>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="select_token_button" class="btn waves waves-effect">SELECT</a>
+	</div>
+</div>
+
+<div class="modal" id="modal_token_login">
+	<div class="modal-content">
+		<form>
+			<div class="row" id="login_pin_input_element">
+				<div class="input-field">
+					<input type="text" id="login_pin_input"/>
+					<label for="user_pin_input">PIN Code </label>
+				</div>
+			</div>
+			
+			<div class="row">
+				Logging in as SO: 
+				<div class="switch">
+					<label>
+						No
+						<input type="checkbox" id="checkbox_so"/>
+						<span class="lever"></span>
+						Yes
+					</label>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="button_token_login_accept" class="btn waves waves-effect">LOGIN</a>
+		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
+	</div>
+</div>
+
+
+<div class="modal" id="modal_token_init">
+	<div class="modal-content">
+		<form>
+			<div class="row col s12 m12 l12">
+				<div class="input-field col s4 m4 l4">
+					<input type="text" id="token_init_pin_input"/>
+					<label for="token_init_pin_input">New Pin</label>
+				</div>
+				<div class="input-field col s8 m8 l8">
+					<input type="text" id="token_init_label_input" maxlength="32"/>
+					<label for="token_init_label_input">New Label</label>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" class="btn waves waves-effect" id="button_token_init_accept">INIT TOKEN</a>
+		<a href="#!" class="btn-flat modal-close waves waves-effect">CLOSE</a>
+	</div>
+</div>
+
+<div class="modal" id="modal_token_login_wait">
+	<div class="modal-content">
+		<div class="row">
+			Please enter your pin on your crypto-device</br>
+			<div class="progress">
+				<div class="indeterminate"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="modal_token_reset">
+	<div class="modal-content">
+		
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="button_token_reset_accept" class="btn waves waves-effect">RESET</a>
+		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
+	</div>
+</div>
+
+<div class="modal" id="modal_token_uPin">
+	<div class="modal-content">
+		
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="button_token_reset_uPin_accept" class="btn waves waves-effect">RESET</a>
+		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
+	</div>
+</div>
+
 </body>
 <!-- loading libraries -->
 <script type="text/javascript" src="public/js/lib/jquery.js"></script>
 <script type="text/javascript" src="public/js/lib/materialize.js"></script>
 <!-- loading our js -->
 <script type="text/javascript" src="public/js/main.js"></script>
+<script type="text/javascript" src="public/js/lib/utils.js"></script>
 <script type="text/javascript" src="public/js/init.js"></script>
 </html>
