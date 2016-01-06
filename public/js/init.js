@@ -263,7 +263,8 @@ document.getElementById("button_token_dump").addEventListener("click", function(
 			app.routing.tokens.dump(app.active_token, $("#dump_path").value, function(err, res){
 				if(err){
 
-					Materialize.toast("déso gros:"+err.message,3000, "toast-fail");
+					Materialize.toast("deso gros: "+err.error.message,3000, "toast-fail");
+					console.error(err);
 					return;
 				}
 				Materialize.toast("Data dumped!", 3000, "toast-success");
