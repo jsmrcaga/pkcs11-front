@@ -25,8 +25,7 @@ function init_getSlots(nb){
 
 				if(cd.properties.findObjectByProp("name", "informations").tokenPresent == true){
 					//if token is there, add the pinche token description to the properties
-
-					app.routing.tokens.getToken(0, (function (CD){
+	app.routing.tokens.getToken(0, (function (CD){
 						return function (err, res) {
 							if(err){
 								Materialize.toast("Error getting token", 3000, "toast-fail");
@@ -49,7 +48,18 @@ function init_getSlots(nb){
 						
 					})(cd));
 
+					app.routing.tokens.mechanisms(0, function (err, res) {
+						console.info("Got token", JSON.parse(res));
+						var mcm = mechanismFactory(res);
+						console.log("Mcm from factory", mcm);
+						console.log("Adding to cd...");
+					});
+
 				}
+				$("#loading_modal").closeModal();
+				displayCd(cd.id);
+		
+				actualize_token_list();
 			}
 
 

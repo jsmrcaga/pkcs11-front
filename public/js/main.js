@@ -33,6 +33,7 @@ function action(name, action)
 	this.name = name;
 	this.action = action;
 }
+
 function managment(listOfPossibleActions)
 {
 	this.name ="Managment";
@@ -56,6 +57,7 @@ function managment(listOfPossibleActions)
 		return res;
 	}
 }
+
 function cryptOperations(listOfPossibleActions)
 {
 	this.name ="Crypto-Operations";
@@ -294,7 +296,6 @@ Object.defineProperty(Token.prototype, "name", {
 	value:"token"
 });
 
-
 function tokenFactory(json){
 	var data = JSON.parse(json);
 	var token = new Token();
@@ -306,7 +307,64 @@ function tokenFactory(json){
 
 	return token;
 }
+function Mechanism(){
+}
 
+Object.defineProperty(Mechanism.prototype, "displayModal", {
+	enumerable: false,
+	value: function _displayMcm(){
+		var table = document.getElementById(config.display.token).children[1];
+		table.innerHTML = "";
+		for(var key in this){
+			var tr = document.createElement("tr");
+			var t_key = document.createElement("td");
+				t_key.className = "italics";
+				t_key.innerHTML = key;
+
+			var t_value = document.createElement("td");
+				t_value.innerHTML = this[key];
+
+			tr.appendChild(t_key);
+			tr.appendChild(t_value);
+
+			table.appendChild(tr);
+		}
+
+		$("#Mechanism_modal").openModal();
+	}
+});
+
+Object.defineProperty(Mechanism.prototype, "display", {
+	enumerable: false,
+	value: function(){
+		var div = document.createElement("div");
+			div.className = "collapsible-header";
+			div.innerHTML = "Mechanisms";
+		var li = document.createElement("li");
+		li.className = "mcm";
+		li.appendChild(div);
+		return li.outerHTML;
+	}
+});
+
+Object.defineProperty(Mechanism.prototype, "name", {
+	enumerable:false,
+	value:"Mechanism"
+});
+
+
+
+function MechanismFactory(json){
+	var data = JSON.parse(json);
+	var mcm = new Mechanism();
+
+	for(var key in data){
+		// copy all elements from json answer to token
+		mcm[key] = data[key];
+	}
+
+	return mcm;
+}
 function unDisplayCd(id)//remove CD selected int the central panel
 {
 	
