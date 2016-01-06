@@ -22,22 +22,32 @@ function init_getSlots(nb){
 
 				var cd = addCd();
 				addSlotDescription(slot, cd);
-				if(cd.properties[0].tokenPresent == true){
+
+				if(cd.properties.findObjectByProp("name", "informations").tokenPresent == true){
 					//if token is there, add the pinche token description to the properties
 
-					app.routing.tokens.getToken(0, function (err, res) {
-						console.info("Got token", JSON.parse(res));
-						var token = tokenFactory(res);
-						console.log("Token from factory", token);
-						console.log("Adding to cd...");
-						cd.push(token);
-						console.log("Added to cd:", cd);
-						$("#loading_modal").closeModal();
-						Materialize.toast("Module loaded succesfully!", 3000, "toast-success");
-						displayCd(cd.id);
-				
-						actualize_token_list();
-					});
+					app.routing.tokens.getToken(0, (function (CD){
+						return function (err, res) {
+							if(err){
+								Materialize.toast("Error getting token", 3000, "toast-fail");
+								return;
+							}
+
+							console.info("Got token", JSON.parse(res));
+							var token = tokenFactory(res);
+							console.log("Adding to cd...");
+							CD.push(token);
+							console.log("Added to cd:", CD);
+							$("#loading_modal").closeModal();
+							displayCd(CD.id);
+					
+							var option = document.createElement("option");
+							option.value = CD.id;
+							option.innerHTML = "CryptoDevice " + CD + " Token";
+							select_token_input.appendChild(option);
+						};
+						
+					})(cd));
 
 				}
 			}
@@ -49,20 +59,6 @@ function init_getSlots(nb){
 
 var select_token_button = document.getElementById("select_token_button");
 var select_token_input = document.getElementById("select_token_input");
-
-function actualize_token_list () {
-	// actualize 
-	for(var cd in cdList){
-		for(var token in cdList[cd].properties){
-			if(cdList[cd].properties[token].name != "token") continue;
-			var option = document.createElement("option");
-			option.value = cd;
-			option.innerHTML = "CryptoDevice " + cd + " Token";
-			select_token_input.appendChild(option);
-		}
-	}
-	$('select').material_select(); // actualize the select, materialize and shit
-}
 
 function loadModule (path) {
 	if(app.paths.history.indexOf(path) < 0) {
@@ -82,6 +78,7 @@ function loadModule (path) {
 		}
 		res = JSON.parse(res);
 		config.routing.api.so_path.jsession = res.jsessionid;
+		Materialize.toast("Module loaded succesfully!", 3000, "toast-success");
 
 		module_getSlotNumber();
 	});
@@ -203,8 +200,6 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 	console.log("Logging in to token:", app.active_token, "as", u, "with PIN", pin);
 	app.routing.tokens.login(app.active_token, pin, u, (function (index, uType){
 		return function (err, res){
-			console.warn("Repsonse from 204: ", res);
-			console.warn(res.length);
 			res = (res == "" || res == null || res.length == 0) ? res : JSON.parse(res);
 			if(err){
 				Materialize.toast("Error logging in: "+res.description, 3000, "toast-fail");
@@ -215,11 +210,35 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 			$("#modal_token_login").closeModal();
 			app.logged_token.push(index);
 			app.login_method = uType;
-			var span_l= document.getElementById("span-logged");
+			var span_l = document.createElement("span");
+			span_l.className = "span-logged";
 			span_l.innerHTML = "Logged Into Token <bold>" + index + "</bold> as <bold>" + app.login_method + "</bold>";
+			
+			var span_cont= document.getElementById("logged-container");
+			span_cont.appendChild(span_l);
+
 			span_l.style.display = "block";
 
 		};
 	})(app.active_token, u));
+
+});
+// init dump button.
+document.getElementById("button_token_dump").addEventListener("click", function(e){
+	e.preventDefault();
+
+	$("#token_select").openModal();
+	select_token_button.onclick = null;
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}
+		$("#token_select").closeModal();
+
+		$("#modal_dump_token").openModal();
+	}
+
 });
 

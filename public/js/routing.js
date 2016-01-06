@@ -11,28 +11,28 @@ config.routing = {
 			number: "/slot/nbSlot",
 			id: function _slotId(id, select){
 				if (!select) select = "*";
-				return "/slot/info/" + id + add_jsession() + "?select=" + select;
+				return "/slot/info/" + id + add_jsession() + getSelect(select);
 			}
 		},
 		tokens:{
 			id: function  _tokenId(id, select){
 				if (!select) select = "*";
-				return "/token/info/" + id + add_jsession() + "?select=" + select;
+				return "/token/info/" + id + add_jsession() + getSelect(select);
 			},
 			init: function _tokenInit(id){
-				return "/token/init/"+ id+ add_jsession() // mechanisms works
+				return "/token/init/"+ id+ add_jsession() 
 			},
 
 			initUserPin: function _tokenInitPinU(id){
-				return "/token/initUserPin/" + id + add_jsession() // mechanisms works
+				return "/token/initUserPin/" + id + add_jsession() 
 			},
 
 			reset: function _tokenreset(id){
 				return "/token/changePW/" + id + add_jsession()
 			},
 
-			mechanisms: function _tokenMech(id){
-				return "/token/mechanisms" + id + add_jsession(); 
+			mechanisms: function _tokenMech(id, select){
+				return "/token/mechanisms" + id + add_jsession()+ getSelect(select); 
 			},
 
 			login: function _tokenLogin(id){
@@ -41,6 +41,14 @@ config.routing = {
 		}
 	}
 };
+
+function getSelect(selects){
+	var plep = "?";
+	for(var sel in selects){
+		plep += "&select="+ selects[sel];
+	}
+	return plep;
+}
 
 function add_jsession(url){
 	if(typeof url == 'undefined') return ";jsessionid=" + config.routing.api.so_path.jsession;
@@ -198,6 +206,10 @@ function token_mech (id, callback) {
 	
 	Workshop.ajax(options);
 }
+
+
+
+
 
 app.routing = {
 	setPath: setPath,

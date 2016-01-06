@@ -16,6 +16,6 @@ var app = {
 
 	login_method: "so",
 	active_token: null,
-	logged_token: null
+	logged_tokens: []
 };
 

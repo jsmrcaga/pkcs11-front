@@ -21,12 +21,16 @@
 	<li><a href="#modal_cryptoList" class="modal-trigger"><i class="material-icons">book</i> Loaded Devices</a></li>
 	<hr>
 	<h5 class="menu-title">Token Operations</h5>
-	<span class="span-logged" id="span-logged">Logged to token </span>
+	<div class="logged-container">
+		<span class="span-logged" id="span-logged">Logged to token </span>
+		
+	</div>
 	<li><a href="#!" id="button_token_login"><i class="material-icons">bookmark</i> Login</a></li>
 	<li><a href="#!" id="button_token_logout"  style='display:none;'><i class="material-icons">bookmark_border</i> Logout</a></li>
 	<li><a href="#!" id="button_token_init"><i class="material-icons">fiber_new</i> Init Token</a></li>
 	<li><a href="#!" id="button_token_uPin"><i class="material-icons">assignment_ind</i> Init User Pin</a></li>
 	<li><a href="#!" id="button_token_reset"><i class="material-icons">autorenew</i> Reset Token</a></li>
+	<li><a href="#!" id="button_token_dump"><i class="material-icons">input</i> Dump info </a></li>
 </ul>
 <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
 
@@ -142,9 +146,26 @@
 				</div>
 			</div>
 		</form>
-	</div>
 	<div class="modal-footer">
 		<a href="#!" id="button_token_login_accept" class="btn waves waves-effect">LOGIN</a>
+		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
+	</div>
+	</div>
+</div>	
+<div class="modal" id="modal_dump_token">
+	<div class="modal-content">
+		<form>
+			<div class="row" id="modal_dump path">
+				<div class="input-field">
+					<input type="text" id="dump path"/>
+					<label for="user_path_input">path </label>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="button_token_dump_accept" class="btn waves waves-effect">LOGIN</a>
 		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
 	</div>
 </div>
