@@ -54,6 +54,11 @@ function init_getSlots(nb){
 					})(cd));
 						app.routing.tokens.mechanisms(index, (function (CD){
 						return function (err, res) {
+							if(err){
+								Materialize.toast("Error getting mechanisms", 3000, "toast-fail");
+								return;
+							}
+
 							console.info("Got mcm", JSON.parse(res));
 							var mcm = MechanismFactory(res);
 							console.log("Adding to cd...");
@@ -253,6 +258,18 @@ document.getElementById("button_token_dump").addEventListener("click", function(
 		$("#token_select").closeModal();
 
 		$("#modal_dump_token").openModal();
+		$("#button_token_dump_accept").click(function(){
+			
+			app.routing.tokens.dump(app.active_token, $("#dump_path").value, function(err, res){
+				if(err){
+
+					Materialize.toast("déso gros:"+err.message,3000, "toast-fail");
+					return;
+				}
+				Materialize.toast("Data dumped!", 3000, "toast-success");
+			});
+							
+		});
 	}
 
 });
