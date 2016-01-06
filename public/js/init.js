@@ -30,16 +30,22 @@ function init_getSlots(nb){
 						var token = tokenFactory(res);
 						console.log("Token from factory", token);
 						console.log("Adding to cd...");
-						cd.push(token);
 						console.log("Added to cd:", cd);
-						$("#loading_modal").closeModal();
-						Materialize.toast("Module loaded succesfully!", 3000, "toast-success");
-						displayCd(cd.id);
-				
-						actualize_token_list();
+
+					});
+					app.routing.tokens.mechanisms(0, function (err, res) {
+						console.info("Got token", JSON.parse(res));
+						var mcm = mechanismFactory(res);
+						console.log("Mcm from factory", mcm);
+						console.log("Adding to cd...");
 					});
 
 				}
+				$("#loading_modal").closeModal();
+				Materialize.toast("Module loaded succesfully!", 3000, "toast-success");
+				displayCd(cd.id);
+		
+				actualize_token_list();
 			}
 
 
