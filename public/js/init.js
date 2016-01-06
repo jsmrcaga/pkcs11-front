@@ -1,3 +1,7 @@
+var select_token_button = document.getElementById("select_token_button");
+var select_token_input = document.getElementById("select_token_input");
+
+
 function module_getSlotNumber () {
 	app.routing.slots.getSlotNumber(function (err, nb){
 		if(err){
@@ -21,11 +25,13 @@ function init_getSlots(nb){
 				console.log("Got slot, adding: ", JSON.parse(slot));
 
 				var cd = addCd();
-				addSlotDescription(slot, cd);
+				addSlotDescription(slot, cd, index);
 
 				if(cd.properties.findObjectByProp("name", "informations").tokenPresent == true){
 					//if token is there, add the pinche token description to the properties
-						app.routing.tokens.getToken(0, (function (CD){
+
+					app.routing.tokens.getToken(index, (function (CD){
+
 						return function (err, res) {
 							if(err){
 								Materialize.toast("Error getting token", 3000, "toast-fail");
@@ -38,13 +44,15 @@ function init_getSlots(nb){
 							CD.push(token);
 							console.log("Added to cd:", CD);
 							var option = document.createElement("option");
-							option.value = CD.id;
-							option.innerHTML = "CryptoDevice " + CD + " Token";
+							option.value = index;
+							option.innerHTML = "CryptoDevice " + index + " Token";
 							select_token_input.appendChild(option);
+						
+							$("select").material_select();
 						};
 						
 					})(cd));
-						app.routing.tokens.getToken(0, (function (CD){
+						app.routing.tokens.mechanisms(index, (function (CD){
 						return function (err, res) {
 							console.info("Got mcm", JSON.parse(res));
 							var mcm = MechanismFactory(res);
@@ -55,13 +63,10 @@ function init_getSlots(nb){
 						
 					})(cd));
 
-
-
 				}
 				$("#loading_modal").closeModal();
 				displayCd(cd.id);
 		
-				actualize_token_list();
 			}
 
 
@@ -69,8 +74,6 @@ function init_getSlots(nb){
 	}
 }
 
-var select_token_button = document.getElementById("select_token_button");
-var select_token_input = document.getElementById("select_token_input");
 
 function loadModule (path) {
 	if(app.paths.history.indexOf(path) < 0) {
@@ -136,7 +139,7 @@ document.getElementById("button_token_login").addEventListener("click", function
 					}
 					Materialize.toast("Success, you are now logged in!", 3000, "toast-success");
 					$("#modal_token_login_wait").closeModal();
-					app.logged_token.push(index);
+					app.logged_tokens.push(index);
 				}
 			})(app.active_token));
 		}else{
@@ -220,7 +223,7 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 			}
 			Materialize.toast("Success, you are now logged in!", 3000, "toast-success");
 			$("#modal_token_login").closeModal();
-			app.logged_token.push(index);
+			app.logged_tokens.push(index);
 			app.login_method = uType;
 			var span_l = document.createElement("span");
 			span_l.className = "span-logged";

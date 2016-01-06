@@ -132,7 +132,8 @@ function singleId()
 	var ret = iter;
 	iter ++;
 	return ret ;
-}//to increment each time we use the variable
+}
+//to increment each time we use the variable
 
 /* pks11 api interface  request     */
 //fonctions to call the api
@@ -140,10 +141,10 @@ function singleId()
 /* pks11 api interface answers      */
 //fonctions to treat api responses
 
-function addSlotDescription(JsonAnswer, cD)//adds a slot from Json answer into the crypto-device
+function addSlotDescription(JsonAnswer, cD, id)//adds a slot from Json answer into the crypto-device
 {
 	//create the object
-	var sl = new info(singleId());
+	var sl = new info(id);
 	//create 
 	var tmp = JSON.parse(JsonAnswer);
 	sl.hardwareSlot = tmp.hardwareSlot;
@@ -317,6 +318,7 @@ Object.defineProperty(Mechanism.prototype, "displayModal", {
 	value: function _displayMcm(){
 		var table = document.getElementById(config.display.token).children[1];
 		table.innerHTML = "";
+		$("#tableTitle").html("Token Mechanisms");
 		for(var key in this){
 			var tr = document.createElement("tr");
 			var t_key = document.createElement("td");

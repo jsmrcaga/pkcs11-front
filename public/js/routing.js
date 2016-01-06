@@ -32,7 +32,7 @@ config.routing = {
 			},
 
 			mechanisms: function _tokenMech(id, select){
-				return "/token/mechanisms" + id + add_jsession()+ getSelect(select); 
+				return "/token/mechanisms/" + id + add_jsession()+ getSelect(select); 
 			},
 
 			login: function _tokenLogin(id){
@@ -43,6 +43,7 @@ config.routing = {
 };
 
 function getSelect(selects){
+	if(typeof selects == 'undefined') return "?select=*";
 	var plep = "?";
 	for(var sel in selects){
 		plep += "&select="+ selects[sel];
@@ -175,7 +176,7 @@ function token_logout(id, callback){
 function token_init_user_pin (id, pin, callback) {
 	//pin null if protected machin
 	var options = {
-		url: config.routing.host + config.routing.tokens.initUserPin(id),
+		url: config.routing.host + config.routing.api.tokens.initUserPin(id),
 		method: "PUT",
 		callback: callback
 	};
@@ -189,7 +190,7 @@ function token_reset (id, pinSo, label, callback) {
 	// pin null if machin
 
 	var options = {
-		url: config.routing.host + config.routing.tokens.reset(id),
+		url: config.routing.host + config.routing.api.tokens.reset(id),
 		method: "PUT",
 		callback: callback
 	};
@@ -197,9 +198,11 @@ function token_reset (id, pinSo, label, callback) {
 	Workshop.ajax(options);
 }
 
-function token_mech (id, callback) {
+function token_mech (id, callback, select) {
 	var options = {
-		url: config.routing.host + config.routing.api.tokens.mechanisms,
+
+		url: config.routing.host + config.routing.api.tokens.mechanisms(id, select),
+
 		method: "GET",
 		callback: callback
 	};
