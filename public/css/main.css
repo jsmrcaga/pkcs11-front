@@ -1,5 +1,16 @@
-.content{
-	padding-left: 240px;
+@media (min-width: 1024px){
+	.content{
+		padding-left: 240px;
+	}
+}
+
+bold{
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+#slide-out{
+	background-color: #FFF;
 }
 
 .menu-logo{

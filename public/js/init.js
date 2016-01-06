@@ -75,7 +75,7 @@ function loadModule (path) {
 
 	$("#loading_modal").openModal();
 	app.routing.setPath(function(err, res, xml){
-		console.log("Got session id:");
+		console.log("Got session id:", res);
 		if(res == ""){
 			$("#loading_modal").closeModal();
 			Materialize.toast("Could not contact server, please verify its availability", 3000, "toast-fail");
@@ -88,18 +88,22 @@ function loadModule (path) {
 	
 }
 
+
+// load module
 document.getElementById("button_load_module").addEventListener("click", function(e){
 	e.preventDefault();
 	var path = document.getElementById("path_to_so");
 	if (path.value == "") {
 		path.style.outline = "#AA0000 solid 2px";
-		Materialize.toast("Please specify a path to the module");
+		Materialize.toast("Please specify a path to the module", 3000, "toast-fail");
 		return;
 	}
 
 	$("#modal_newCrypto").closeModal();
 	loadModule(path.value); 
 });
+
+
 
 document.getElementById("button_token_login").addEventListener("click", function(){
 	$("#token_select").openModal();
@@ -123,7 +127,7 @@ document.getElementById("button_token_login").addEventListener("click", function
 					}
 					Materialize.toast("Success, you are now logged in!", 3000, "toast-success");
 					$("#modal_token_login_wait").closeModal();
-					app.logged_token = index;
+					app.logged_token.push(index);
 				}
 			})(app.active_token));
 		}else{
@@ -167,7 +171,7 @@ document.getElementById("button_token_init_accept").addEventListener("click", fu
 		app.routing.tokens.init(app.active_token, label, pin, function (err, res){
 			res = (res == "" || res == null || res.length == 0) ? res : JSON.parse(res);
 			if(err){
-				Materialize.toast("Error initializing token: " + res.description, 3000, "toast-fail");
+				Materialize.toast("Error initializing token "+app.active_token+": " + res.description, 3000, "toast-fail");
 				$("#modal_token_init").closeModal();
 				if(app.needs_loading) $("#loading_modal").close
 				return;
@@ -197,7 +201,7 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 	}
 
 	console.log("Logging in to token:", app.active_token, "as", u, "with PIN", pin);
-	app.routing.tokens.login(app.active_token, pin, u, (function (index){
+	app.routing.tokens.login(app.active_token, pin, u, (function (index, uType){
 		return function (err, res){
 			console.warn("Repsonse from 204: ", res);
 			console.warn(res.length);
@@ -209,11 +213,13 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 			}
 			Materialize.toast("Success, you are now logged in!", 3000, "toast-success");
 			$("#modal_token_login").closeModal();
-			app.logged_token = index;
+			app.logged_token.push(index);
+			app.login_method = uType;
 			var span_l= document.getElementById("span-logged");
-			span_l.innerHTML = "Logged Into Token " + app.logged_token;
+			span_l.innerHTML = "Logged Into Token <bold>" + index + "</bold> as <bold>" + app.login_method + "</bold>";
 			span_l.style.display = "block";
 
 		};
-	})(app.active_token));
+	})(app.active_token, u));
 });
+
