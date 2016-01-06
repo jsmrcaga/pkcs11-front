@@ -217,3 +217,9 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 		};
 	})(app.active_token));
 });
+// init dump button.
+document.getElementById("button_token_dump").addEventListener("click", function(e){
+	e.preventDefault();
+	$("#modal_dump_token").openModal();
+});
+
