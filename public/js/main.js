@@ -240,7 +240,9 @@ function displayCd(id)//display a CD selected int the central panel
 				case "token":
 						$("#cd-"+cD.id+" .token").click(cD.properties[i].displayModal.bind(cD.properties[i])); // add all operation interactions
 				break;
-
+				case "Mechanisms":
+						$("#cd-"+cD.id+" .mcm").click(cD.properties[i].displayModal.bind(cD.properties[i])); // add all operation interactions
+				break;
 			}
 			
 			
@@ -330,7 +332,7 @@ Object.defineProperty(Mechanism.prototype, "displayModal", {
 			table.appendChild(tr);
 		}
 
-		$("#Mechanism_modal").openModal();
+		$("#token_modal").openModal();
 	}
 });
 
@@ -349,7 +351,7 @@ Object.defineProperty(Mechanism.prototype, "display", {
 
 Object.defineProperty(Mechanism.prototype, "name", {
 	enumerable:false,
-	value:"Mechanism"
+	value:"Mechanisms"
 });
 
 

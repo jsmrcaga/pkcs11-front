@@ -199,7 +199,7 @@ function token_reset (id, pinSo, label, callback) {
 
 function token_mech (id, callback) {
 	var options = {
-		url: config.routing.host + config.routing.tokens.mechanisms,
+		url: config.routing.host + config.routing.api.tokens.mechanisms,
 		method: "GET",
 		callback: callback
 	};
