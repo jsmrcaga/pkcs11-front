@@ -20,15 +20,15 @@ config.routing = {
 				return "/token/info/" + id + add_jsession() + getSelect(select);
 			},
 			init: function _tokenInit(id){
-				return "/token/init/"+ id+ add_jsession() 
+				return "/token/init/"+ id+ add_jsession();
 			},
 
 			initUserPin: function _tokenInitPinU(id){
-				return "/token/initUserPin/" + id + add_jsession() 
+				return "/token/initUserPin/" + id + add_jsession();
 			},
 
 			reset: function _tokenreset(id){
-				return "/token/changePW/" + id + add_jsession()
+				return "/token/changePW/" + id + add_jsession();
 			},
 
 			mechanisms: function _tokenMech(id, select){
@@ -36,8 +36,24 @@ config.routing = {
 			},
 
 			login: function _tokenLogin(id){
-				return "/session/" + id + add_jsession()
+				return "/session/" + id + add_jsession();
+			},
+			dump_info: function _tokenDump(id){
+				return "/token/object/dump/" + id + add_jsession();
+			},
+			delete_object: function _tokenDeleteObj (idT, idObj) {
+				return "/token/object/" + idT + "/" + idObj + add_jsession();
+			},
+			list_object: function _tokenlistObj (id) {
+				return "/token/object/" + id + add_jsession();
+			},
+			random : function _tokenRandom (id, bytes) {
+				return "/token/random/" + id + "/" + bytes + add_jsession();
+			},
+			secret_key: function _tokenSecretKey (id) {
+				return "/token/SecretKey" + id + add_jsession();
 			}
+
 		}
 	}
 };
@@ -210,6 +226,60 @@ function token_mech (id, callback, select) {
 	Workshop.ajax(options);
 }
 
+function token_dump (id, path, callback) {
+	var options = {
+		url: config.routing.host + config.routing.api.tokens.dump_info(id),
+		method: "PUT",
+		data:{
+			path: path
+		},
+		status:204,
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
+
+function token_delete_object (id, idObj, callback) {
+	var options = {
+		url: config.routing.host + config.routing.api.tokens.delete_object(id, idObj),
+		method: "DELETE",
+		status:204,
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
+
+function token_listObj (id, callback) {
+	var options = {
+		url: config.routing.host + config.routing.api.tokens.list_object(id),
+		method: "GET",
+		callback: callback
+	};
+
+	Workshop.ajax(options);
+}
+
+function token_random (id, bytes) {
+	var options = {
+		url: config.routing.host + config.routing.api.tokens.random(id, bytes),
+		method: "GET",
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
+
+function token_secretKey (id, callback) {
+	var options = {
+		url: config.routing.host + config.routing.api.tokens.secret_key(id),
+		method: "GET",
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
 
 
 
@@ -227,6 +297,12 @@ app.routing = {
 		logout: token_logout,
 		initUserPin : token_init_user_pin,
 		reset: token_reset,
-		mechanisms: token_mech
+		mechanisms: token_mech,
+		dump: token_dump,
+		deleteObject: token_delete_object,
+		listObjects: token_listObj,
+		random: token_random,
+		secretKey: token_secretKey,
+
 	}
 };
