@@ -259,11 +259,12 @@ document.getElementById("button_token_dump").addEventListener("click", function(
 
 		$("#modal_dump_token").openModal();
 		$("#button_token_dump_accept").click(function(){
-			
-			app.routing.tokens.dump(app.active_token, $("#dump_path").value, function(err, res){
+			var path = $("#dump_path").value;
+			path = (path == "") ? "~" : path; 
+			app.routing.tokens.dump(app.active_token, path, function(err, res){
+				res = (res == "" || res == null || res.length == 0) ? res : JSON.parse(res);
 				if(err){
-
-					Materialize.toast("déso gros:"+err.message,3000, "toast-fail");
+					Materialize.toast("déso gros:"+res.description,3000, "toast-fail");
 					return;
 				}
 				Materialize.toast("Data dumped!", 3000, "toast-success");
