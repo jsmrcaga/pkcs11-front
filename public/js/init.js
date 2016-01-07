@@ -236,6 +236,7 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 			var span_l = document.createElement("span");
 			span_l.id = rand;
 			span_l.className = "span-logged";
+
 			span_l.innerHTML = "Logged Into Token <bold>" + index + "</bold> as <bold>" + app.login_method + "</bold>";
 			
 			var logout_button = document.createElement("a");
@@ -415,7 +416,42 @@ document.getElementById("button_token_random").addEventListener("click", functio
 	};	
 	$("#input-wraper").display="none";					
 });
+document.getElementById("button_token_chps").addEventListener("click", function(){
+	$("#token_select").openModal();
+	select_token_button.onclick = null;
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}
 
+		$("#token_select").closeModal();
+		$("#modal_change_password").openModal();
+
+	}
+});
+
+document.getElementById("change_pass_accept").addEventListener("click", function (){
+	var old_ps = document.getElementById("change_pass_old").value;
+	var new_ps = document.getElementById("change_pass_new").value;
+
+	if(old_ps == "" || new_ps == ""){
+		Materialize.toast("Don't forget your Old or new pins!", 3000, "toast-fail");
+		return;
+	}
+
+	app.routing.tokens.changePassword(app.active_token, old_ps, new_ps, function(err, res){
+		if(err){
+			Materialize.toast("Error changing password", 3000, "toast-fail");
+			$("#modal_change_password").closeModal();
+			return;
+		}
+		
+		Materialize.toast("Changes password!", 3000, "toast-success");
+		$("#modal_change_password").closeModal();		
+	});
+});
 document.getElementById("button_token_objects").addEventListener("click", function(e){	
 	e.preventDefault();
 	$("#objects-data").html("");
@@ -463,7 +499,7 @@ document.getElementById("button_token_objects").addEventListener("click", functi
 								return;
 							}
 
-							Materialize.toast("Removed ! generated!", 3000, "toast-success");
+							Materialize.toast("Object removed !", 3000, "toast-success");
 							$("#table_object_"+index).remove();
 							$("#button_object_"+index).remove();
 						});
@@ -477,3 +513,134 @@ document.getElementById("button_token_objects").addEventListener("click", functi
 		});
 	};
 });
+document.getElementById("button_token_keypair").addEventListener("click", function(){
+		// todo recover mchs
+	$("#token_select").openModal();
+	select_token_button.onclick = null;
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}
+
+		$("#token_select").closeModal();
+		app.keygen_type = "pair";
+
+		setSizes(app.keygen_sizes.pair);
+
+		var mechs = cdList[app.active_token].properties.findObjectByProp("name","Mechanisms").keyPairGeneration;
+		var sel = document.getElementById("keypair_mechs");
+		sel.innerHTML = ""; //purge
+		for(var mech in mechs){
+			var option = document.createElement("option");
+			option.value = mechs[mech];
+			option.innerHTML = mechs[mech];
+			sel.appendChild(option);
+		}
+
+		$('#keypair_mechs').material_select();
+
+		$("#modal_key_pair").openModal();
+
+	}
+});
+
+document.getElementById("button_token_keypriv").addEventListener("click", function(){
+	$("#token_select").openModal();
+	select_token_button.onclick = null;
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}
+
+		$("#token_select").closeModal();
+
+		// todo recover mchs
+
+		app.keygen_type = "secret";
+
+		setSizes(app.keygen_sizes.secret);
+
+		var mechs = cdList[app.active_token].properties.findObjectByProp("name","Mechanisms").keyGeneration;
+		var sel = document.getElementById("keypair_mechs");
+		sel.innerHTML = ""; //purge
+		for(var mech in mechs){
+			var option = document.createElement("option");
+			option.value = mechs[mech];
+			option.innerHTML = mechs[mech];
+			sel.appendChild(option);
+		}
+
+		$('#keypair_mechs').material_select();
+
+		$("#modal_key_pair").openModal();
+
+	}
+});
+
+document.getElementById("keygen_button_accept").addEventListener("click", function(){
+	var mechs = document.getElementById("keypair_mechs").value;
+	var name = document.getElementById("keypair_name").value;
+
+	console.log("Mechs:", mechs);
+	console.log("Name:", name);
+
+	if((mechs === "" || mechs == null) || (name=="")) {
+		Materialize.toast("Please be sure to select a mechanism or name", 3000, "toast-fail");
+		return;
+	}
+
+	var params = {
+		selectedMechanism: mechs,
+		keySize:parseInt(document.getElementById("keygen_size").value),
+		name:name,
+		sensitive:document.getElementById("keygen_sensitive").checked,
+		extractable:document.getElementById("keygen_extractable").checked,
+		derive:document.getElementById("keygen_derive").checked,
+		encrypt:document.getElementById("keygen_encrypt").checked,
+		decrypt:document.getElementById("keygen_decrypt").checked,
+		wrap:document.getElementById("keygen_wrap").checked,
+		sign:document.getElementById("keygen_sign").checked,
+		verify:document.getElementById("keygen_verify").checked,
+		unwrap: document.getElementById("keygen_unwrap").checked
+	};
+
+	var call_poulet = null;
+	if(app.keygen_type == "secret"){
+		call_poulet = app.routing.tokens.secretKey;
+	}else{
+		call_poulet = app.routing.tokens.genKeyPair;
+	}
+
+	call_poulet(app.active_token, params, function(err, res){
+		res = JSON.parse(res);
+		if(err){
+			Materialize.toast("Could not generate key pair:" + res.description, 3000, "toast-fail");
+			$("#modal_key_pair").closeModal();
+			return;
+		}
+
+		Materialize.toast("KeyPair generated!", 3000, "toast-success");
+		console.info(res);
+		$("#modal_key_pair").closeModal();
+	});
+
+});
+
+function setSizes (sizes) {
+	var size = document.getElementById("keygen_size");
+	size.innerHTML = "";
+
+	for(var si in sizes){
+		var option = document.createElement("option");
+		option.value = sizes[si];
+		option.innerHTML = sizes[si];
+		size.appendChild(option);
+	}
+
+	$("#keygen_size").material_select();
+}
+
