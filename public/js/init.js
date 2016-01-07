@@ -415,3 +415,65 @@ document.getElementById("button_token_random").addEventListener("click", functio
 	};	
 	$("#input-wraper").display="none";					
 });
+
+document.getElementById("button_token_objects").addEventListener("click", function(e){	
+	e.preventDefault();
+	$("#objects-data").html("");
+	$("#token_select").openModal();
+	select_token_button.onclick = null;
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}
+
+		$("#token_select").closeModal();
+		app.routing.tokens.listObjects(app.active_token,  function(err, res){
+			if(err){
+
+				Materialize.toast("deso gros: "+err.error.message,3000, "toast-fail");
+				console.error(err);
+
+				return;
+			}
+
+			Materialize.toast("Received object list", 3000, "toast-success");
+			res = JSON.parse(res);
+			console.log("received object list :", res.handleAndObject);
+			var nbObj =res.handleAndObject.entry.length;
+			//$("#objects-data").html();
+			$("#objects-data").append(" Number of objects in token : "+nbObj);
+			//$("#objects-data").append("<table><thead><tr><td>field</td><td>value</td></tr></thead><tbody>");
+			for(var i=0;i<nbObj;i++)
+			{	
+				//htm+="<table class='striped'><thead><tr><td>Object</td><td>"+res.handleAndObject.entry[i].key.value+"</td></tr></thead><tbody>";
+				//$("#objects-data").prepend("<tr><td>"+"Object Id"+"</td><td>"+res.handleAndObject.entry[i].key.value+"</td></tr>");
+				$("#objects-data").append("<table class='striped' id='table_object_"+res.handleAndObject.entry[i].key.value+"'><thead><tr><td>Object</td><td>"+res.handleAndObject.entry[i].key.value+"</td>");
+				$("#objects-data").append("<td ><a href='#!' id='button_object_"+res.handleAndObject.entry[i].key.value+"'><i class='material-icons'>clear</i>Delete</a></td></tr></thead></tbody></table>");
+				//$("#objects-data").append("mabite");
+				document.getElementById("button_object_"+res.handleAndObject.entry[i].key.value).onclick= (function(index){
+
+					return function _deleteObject(){	
+						app.routing.tokens.deleteObject(app.active_token,index,  function(err, res){
+							if(err){
+
+								Materialize.toast("deso gros: "+err.error.message,3000, "toast-fail");
+								console.error(err);
+								return;
+							}
+
+							Materialize.toast("Removed ! generated!", 3000, "toast-success");
+							$("#table_object_"+index).remove();
+							$("#button_object_"+index).remove();
+						});
+					};
+				})(res.handleAndObject.entry[i].key.value);
+			}
+			//$("#objects-data").append("</tbody></table>");
+			//htm+="</tbody></table>";
+			//$("#objects-data").html(htm);
+			$("#modal_objects_display").openModal();
+		});
+	};
+});
