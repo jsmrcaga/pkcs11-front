@@ -264,7 +264,7 @@ document.getElementById("button_token_dump").addEventListener("click", function(
 			app.routing.tokens.dump(app.active_token, path, function(err, res){
 				res = (res == "" || res == null || res.length == 0) ? res : JSON.parse(res);
 				if(err){
-					Materialize.toast("déso gros:"+res.description,3000, "toast-fail");
+					Materialize.toast("deso gros: "+err.error.message,3000, "toast-fail");
 					return;
 				}
 				Materialize.toast("Data dumped!", 3000, "toast-success");
