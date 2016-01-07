@@ -62,5 +62,13 @@ td, th {
 	margin-left: 10px;
 	margin-right: 10px;
 	display: none;
-	font-size: 16px;
+	font-size: 13px;
+}
+
+.logout_button{
+	line-height: 12px !important;
+	padding: 0 0 !important;
+	height: auto !important;
+	display: inline !important;
+	margin-left: 15px !important;
 }

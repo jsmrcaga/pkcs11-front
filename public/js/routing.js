@@ -28,6 +28,10 @@ config.routing = {
 			},
 
 			reset: function _tokenreset(id){
+				return "/token/reset/" + id + add_jsession();
+			},
+
+			change_password: function _tokenChPw(id){
 				return "/token/changePW/" + id + add_jsession();
 			},
 
@@ -183,6 +187,7 @@ function token_logout(id, callback){
 	var options = {
 		method: "DELETE",
 		url: config.routing.host + config.routing.api.tokens.login(id),
+		status:204,
 		callback: callback
 	};
 
@@ -194,7 +199,11 @@ function token_init_user_pin (id, pin, callback) {
 	var options = {
 		url: config.routing.host + config.routing.api.tokens.initUserPin(id),
 		method: "PUT",
-		callback: callback
+		data:{
+			pin: pin
+		},
+		callback: callback,
+		status:204
 	};
 	
 	Workshop.ajax(options);
@@ -208,6 +217,7 @@ function token_reset (id, pinSo, label, callback) {
 	var options = {
 		url: config.routing.host + config.routing.api.tokens.reset(id),
 		method: "PUT",
+		status:204,
 		callback: callback
 	};
 	
@@ -261,7 +271,7 @@ function token_listObj (id, callback) {
 	Workshop.ajax(options);
 }
 
-function token_random (id, bytes) {
+function token_random (id, bytes, callback) {
 	var options = {
 		url: config.routing.host + config.routing.api.tokens.random(id, bytes),
 		method: "GET",
@@ -282,7 +292,19 @@ function token_secretKey (id, callback) {
 }
 
 
-
+function token_change_pass(id, oldPass, newPass, callback){
+	var options = {
+		url: config.routing.host + config.routing.tokens.change_password,
+		method: "PUT",
+		data:{
+			oldPin : oldPass,
+			newPin: newPass
+		},
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
 
 app.routing = {
 	setPath: setPath,
@@ -303,6 +325,6 @@ app.routing = {
 		listObjects: token_listObj,
 		random: token_random,
 		secretKey: token_secretKey,
-
+		changePassword: token_change_pass
 	}
 };

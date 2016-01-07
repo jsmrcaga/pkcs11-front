@@ -230,10 +230,38 @@ document.getElementById("button_token_login_accept").addEventListener("click", f
 			$("#modal_token_login").closeModal();
 			app.logged_tokens.push(index);
 			app.login_method = uType;
+
+			var rand = parseInt(Math.random() * 100000);
+
 			var span_l = document.createElement("span");
+			span_l.id = rand;
 			span_l.className = "span-logged";
 			span_l.innerHTML = "Logged Into Token <bold>" + index + "</bold> as <bold>" + app.login_method + "</bold>";
 			
+			var logout_button = document.createElement("a");
+				var i_l = document.createElement("i");
+				i_l.className="material-icons";
+				i_l.innerHTML = "clear";
+				logout_button.appendChild(i_l);
+			logout_button.href = "#!";
+			logout_button.className = "logout_button";
+			logout_button.addEventListener("click", (function(id){
+
+				return function(){
+					app.routing.tokens.logout(index, function(err, res){
+						if(err){
+							Materialize.toast("Could not logout", 3000, "toast-fail");
+							return;
+						}
+
+						document.getElementById(id).style.display = "none";
+
+					});
+				};
+
+			})(rand));
+
+			span_l.appendChild(logout_button);
 			var span_cont= document.getElementById("logged-container");
 			span_cont.appendChild(span_l);
 
@@ -258,20 +286,93 @@ document.getElementById("button_token_dump").addEventListener("click", function(
 		$("#token_select").closeModal();
 
 		$("#modal_dump_token").openModal();
-		$("#button_token_dump_accept").click(function(){
+		document.getElementById("button_token_dump_accept").onclick = function(){
 			var path = $("#dump_path").value;
 			path = (path == "") ? "~" : path; 
 			app.routing.tokens.dump(app.active_token, path, function(err, res){
 				res = (res == "" || res == null || res.length == 0) ? res : JSON.parse(res);
 				if(err){
 					Materialize.toast("deso gros: "+err.error.message,3000, "toast-fail");
+					$("#modal_dump_token").closeModal();
 					return;
 				}
 				Materialize.toast("Data dumped!", 3000, "toast-success");
+				$("#modal_dump_token").closeModal();
 			});
 							
-		});
+		};
 	}
 
 });
 
+
+// Reset token
+
+document.getElementById("button_token_reset").addEventListener("click", function(){
+	$("#token_select").openModal();
+	select_token_button.onclick = null;
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}
+
+		$("#token_select").closeModal();
+		$("#token_reset_modal").openModal();
+
+	}
+});
+
+document.getElementById("token_reset_button").addEventListener("click", function(){
+	var pin = document.getElementById("pin_so_reset_input").value;
+	var label = document.getElementById("label_reset_input").value;
+	if(pin == ""){
+		Materialize.toast("Please enter your SO pin", 3000, "toast-fail");
+		return;
+	}
+	app.routing.tokens.reset(app.active_token, pin, label, function(err, res){
+		if(err){
+			Materialize.toast("Error resetting token", 3000, "toast-fail");
+			return;
+		}
+
+		Materialize.toast("Token reset!", 3000, "toast-success");
+	});
+});
+
+document.getElementById("button_token_uPin").addEventListener("click", function(){
+	$("#token_select").openModal();
+	select_token_button.onclick = null;
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}
+
+		$("#token_select").closeModal();
+		$("#modal_token_uPin").openModal();
+
+	}
+});
+
+document.getElementById("button_token_reset_uPin_accept").addEventListener("click", function(){
+	var pin = document.getElementById("new_user_pin").value;
+	if(pin ==""){
+		Materialize.toast("Please be sure to select a pin", 3000, "toast-fail");
+		return;
+	}
+	app.routing.tokens.initUserPin(app.active_token, pin, function(err, res){
+		if(err){
+			Materialize.toast("Could not initialize user pin", 3000, "toast-fail");
+			$("#modal_token_uPin").closeModal();
+			return;
+		}
+
+
+		Materialize.toast("User Pin correctly Init", 3000, "toast-success");
+		$("#modal_token_uPin").closeModal();
+
+	});
+});

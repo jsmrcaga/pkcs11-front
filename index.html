@@ -203,26 +203,39 @@
 	</div>
 </div>
 
-<div class="modal" id="modal_token_reset">
-	<div class="modal-content">
-		
-	</div>
-	<div class="modal-footer">
-		<a href="#!" id="button_token_reset_accept" class="btn waves waves-effect">RESET</a>
-		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
-	</div>
-</div>
-
 <div class="modal" id="modal_token_uPin">
 	<div class="modal-content">
-		
+		<div class ="row col s12 m12 l12">
+			<div class="input-field">
+				<input id="new_user_pin" type="text"/>
+				<label for="new_user_pin">New User Pin</label>
+			</div>
+		</div>
 	</div>
 	<div class="modal-footer">
-		<a href="#!" id="button_token_reset_uPin_accept" class="btn waves waves-effect">RESET</a>
+		<a href="#!" id="button_token_reset_uPin_accept" class="btn waves waves-effect">INIT USER PIN</a>
 		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
 	</div>
 </div>
 
+<div class="modal" id="token_reset_modal">
+	<div class="modal-content">
+		<div class="row col s12 m12 l12">
+			<div class="input-field col s4  m4 l4">
+				<input type="text" id="pin_so_reset_input"/>
+				<label for="pin_so_reset_input">So Pin</label>
+			</div>
+			<div class="input-field col s8  m8 l8">
+				<input type="text" id="label_reset_input"/>
+				<label for="label_reset_input">Label</label>
+			</div>
+		</div>
+	</div>
+
+	<div cass="modal-footer">
+		<a href="#!" id="token_reset_button" class="btn waves waves-effect">RESET</a>
+	</div>
+</div>
 </body>
 <!-- loading libraries -->
 <script type="text/javascript" src="public/js/lib/jquery.js"></script>
