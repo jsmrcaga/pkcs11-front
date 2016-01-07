@@ -305,10 +305,8 @@ document.getElementById("button_token_dump").addEventListener("click", function(
 
 });
 
-
-// Reset token
-
 document.getElementById("button_token_reset").addEventListener("click", function(){
+
 	$("#token_select").openModal();
 	select_token_button.onclick = null;
 	select_token_button.onclick = function(){
@@ -323,6 +321,9 @@ document.getElementById("button_token_reset").addEventListener("click", function
 
 	}
 });
+
+
+
 
 document.getElementById("token_reset_button").addEventListener("click", function(){
 	var pin = document.getElementById("pin_so_reset_input").value;
@@ -357,6 +358,7 @@ document.getElementById("button_token_uPin").addEventListener("click", function(
 	}
 });
 
+
 document.getElementById("button_token_reset_uPin_accept").addEventListener("click", function(){
 	var pin = document.getElementById("new_user_pin").value;
 	if(pin ==""){
@@ -375,4 +377,39 @@ document.getElementById("button_token_reset_uPin_accept").addEventListener("clic
 		$("#modal_token_uPin").closeModal();
 
 	});
+});
+
+document.getElementById("button_token_random").addEventListener("click", function(e){	
+	e.preventDefault();
+	document.getElementById("input-wraper").style.display="block";
+	$("#token_select").openModal();
+
+	select_token_button.onclick = function(){
+		app.active_token = parseInt(select_token_input.value);
+		if(app.active_token === "" || app.active_token == null || isNaN(app.active_token)) {
+			Materialize.toast("Please be sure to select a token", 3000, "toast-fail");
+			return;
+		}		
+		if(document.getElementById("random-size").value == "") {
+			Materialize.toast("Please be sure to enter number of bytes", 3000, "toast-fail");
+			return;
+		}
+		$("#token_select").closeModal();
+		$("#modal_token_random_wait").openModal();	
+		app.routing.tokens.random(app.active_token,document.getElementById("random-size").value,  function(err, res){
+			if(err){
+
+				Materialize.toast("deso gros: "+err.error.message,3000, "toast-fail");
+				console.error(err);
+				$("#modal_token_random_wait").closeModal();
+				return;
+			}
+	
+			Materialize.toast("Random generated!", 3000, "toast-success");
+			$("#modal_token_random_wait").closeModal();
+			$("#random-data").html(" Data generated : "+res);
+			$("#modal_random_display").openModal();
+		});
+	};	
+	$("#input-wraper").display="none";					
 });
