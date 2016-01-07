@@ -407,7 +407,9 @@ document.getElementById("button_token_random").addEventListener("click", functio
 	
 			Materialize.toast("Random generated!", 3000, "toast-success");
 			$("#modal_token_random_wait").closeModal();
-			$("#random-data").html(" Data generated : "+res);
+
+			var rand = JSON.parse(res);
+			$("#random-data").html(" Data generated : "+rand.bytesArray);
 			$("#modal_random_display").openModal();
 		});
 	};	
