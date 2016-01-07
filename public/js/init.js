@@ -407,6 +407,7 @@ document.getElementById("button_token_random").addEventListener("click", functio
 			}
 	
 			Materialize.toast("Random generated!", 3000, "toast-success");
+			document.getElementById("input-wraper").style.display="none";
 			$("#modal_token_random_wait").closeModal();
 
 			var rand = JSON.parse(res);
@@ -471,7 +472,7 @@ document.getElementById("button_token_keypair").addEventListener("click", functi
 
 		app.keygen_type = "pair";
 
-		setSizes(app.keygen_sizes.secret);
+		setSizes(app.keygen_sizes.pair);
 
 		var mechs = cdList[app.active_token].properties.findObjectByProp("name","Mechanisms").keyPairGeneration;
 		var sel = document.getElementById("keypair_mechs");
@@ -567,7 +568,7 @@ document.getElementById("keygen_button_accept").addEventListener("click", functi
 			return;
 		}
 
-		Materialize.toast("KeyPair generated!", 3000, "toast-success");
+		Materialize.toast("Key generated!", 3000, "toast-success");
 		console.info(res);
 		$("#modal_key_pair").closeModal();
 	});
