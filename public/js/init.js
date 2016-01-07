@@ -24,7 +24,7 @@ function init_getSlots(nb){
 				}
 				console.log("Got slot, adding: ", JSON.parse(slot));
 
-				var cd = addCd();
+				var cd = addCd(index);
 				addSlotDescription(slot, cd, index);
 
 				if(cd.properties.findObjectByProp("name", "informations").tokenPresent == true){
@@ -52,6 +52,7 @@ function init_getSlots(nb){
 						};
 						
 					})(cd));
+
 						app.routing.tokens.mechanisms(index, (function (CD){
 						return function (err, res) {
 							if(err){

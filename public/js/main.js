@@ -81,9 +81,9 @@ function cryptOperations(listOfPossibleActions)
 		return res;
 	}
 }
-function cryptoDevice()// to see like an actual slot
+function cryptoDevice(id)// to see like an actual slot
 {
-	this.id = singleId();
+	this.id = id;
 	this.properties =new Array();
 	this.nbSlots = function _nbSlots(){ return this.properties.length;};
 	this.display = function _display(){
@@ -126,13 +126,7 @@ function findIndexById(id)
 		}
 		return -1;
 }
-var iter=0; // global variable to create unique ids for CDs.
-function singleId()
-{
-	var ret = iter;
-	iter ++;
-	return ret ;
-}
+
 //to increment each time we use the variable
 
 /* pks11 api interface  request     */
@@ -178,9 +172,9 @@ function returnPropByName(cD, name)
 	console.log("error, unexisting property");
 	return -1;
 }
-function addCd()// returns a new cd.
+function addCd(index)// returns a new cd.
 {
-	var cD = new cryptoDevice(); 
+	var cD = new cryptoDevice(index); 
 	cdList.push(cD);
 	// displayCd(cD.id);
 	actualizeList();
