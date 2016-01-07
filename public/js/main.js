@@ -87,7 +87,7 @@ function cryptoDevice(id)// to see like an actual slot
 	this.properties =new Array();
 	this.nbSlots = function _nbSlots(){ return this.properties.length;};
 	this.display = function _display(){
-		var res ="<div class='col s3' id='cd-"+this.id+"'>";
+		var res ="<div class='col s12 m3 l3' id='cd-"+this.id+"'>";
 		res +="<div class ='card-panel'> Slot "+ this.id;
 		res += "<a href='#' class='secondary-content'><i class='material-icons' id='rd-cd-"+this.id+"'>remove</i></a></div>"; 	// reduce button
 		res += "<div><ul class='collapsible' data-collapsible='accordion'>";
