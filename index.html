@@ -31,6 +31,7 @@
 	<li><a href="#!" id="button_token_uPin"><i class="material-icons">assignment_ind</i> Init User Pin</a></li>
 	<li><a href="#!" id="button_token_reset"><i class="material-icons">autorenew</i> Reset Token</a></li>
 	<li><a href="#!" id="button_token_dump"><i class="material-icons">input</i> Dump Token </a></li>
+	<li><a href="#!" id="button_token_random"><i class="material-icons">surround_sound</i> Generate Random </a></li>
 </ul>
 <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
 
@@ -118,6 +119,10 @@
 			<option value="" selected>Select Token</option>
 		</select>
 		<label>Select token to use</label>
+		<div class="input-field" id="input-wraper" style="display:none;">
+			<input type="text" id="random-size" />
+			<label for="random-size">number of bytes</label>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<a href="#!" id="select_token_button" class="btn waves waves-effect">SELECT</a>
@@ -203,6 +208,17 @@
 	</div>
 </div>
 
+<div class="modal" id="modal_token_random_wait">
+	<div class="modal-content">
+		<div class="row">
+			Generating random data ... </br>
+			<div class="progress">
+				<div class="indeterminate"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal" id="modal_token_reset">
 	<div class="modal-content">
 		
@@ -219,6 +235,14 @@
 	</div>
 	<div class="modal-footer">
 		<a href="#!" id="button_token_reset_uPin_accept" class="btn waves waves-effect">RESET</a>
+		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
+	</div>
+</div>
+<div class="modal" id="modal_random_display">
+	<div class="modal-content" id="random-data">	
+
+	</div>
+	<div class="modal-footer">
 		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
 	</div>
 </div>
