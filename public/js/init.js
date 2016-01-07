@@ -91,12 +91,18 @@ function loadModule (path) {
 
 	$("#loading_modal").openModal();
 	app.routing.setPath(function(err, res, xml){
+		res = JSON.parse(res);
+		if(err){
+			Materialize.toast("Could not load module: "+res.description, 3000, "toast-fail");
+			$("#loading_modal").closeModal();
+			return;
+		}
+
 		console.log("Got session id:", res);
 		if(res == ""){
 			$("#loading_modal").closeModal();
 			Materialize.toast("Could not contact server, please verify its availability", 3000, "toast-fail");
 		}
-		res = JSON.parse(res);
 		config.routing.api.so_path.jsession = res.jsessionid;
 		Materialize.toast("Module loaded succesfully!", 3000, "toast-success");
 
