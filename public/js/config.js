@@ -16,6 +16,11 @@ var app = {
 
 	login_method: "so",
 	active_token: null,
-	logged_tokens: []
+	logged_tokens: [],
+	keygen_type: "secret",
+	keygen_sizes:{
+		pair: [2048, 4096],
+		secret: [128, 192, 256]
+	}
 };
 

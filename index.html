@@ -29,8 +29,11 @@
 	<li><a href="#!" id="button_token_logout"  style='display:none;'><i class="material-icons">bookmark_border</i> Logout</a></li>
 	<li><a href="#!" id="button_token_init"><i class="material-icons">fiber_new</i> Init Token</a></li>
 	<li><a href="#!" id="button_token_uPin"><i class="material-icons">assignment_ind</i> Init User Pin</a></li>
+	<li><a href="#!" id="button_token_chps"><i class="material-icons">lock_open</i> Change Password</a></li>
 	<li><a href="#!" id="button_token_reset"><i class="material-icons">autorenew</i> Reset Token</a></li>
 	<li><a href="#!" id="button_token_dump"><i class="material-icons">input</i> Dump Token </a></li>
+	<li><a href="#!" id="button_token_keypriv"><i class="material-icons">vpn_key</i> Generate Sym. Key</a></li>
+	<li><a href="#!" id="button_token_keypair"><i class="material-icons">vpn_key</i> Generate Key Pair </a></li>
 	<li><a href="#!" id="button_token_random"><i class="material-icons">surround_sound</i> Generate Random </a></li>
 </ul>
 <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">menu</i></a>
@@ -253,12 +256,103 @@
 	</div>
 </div>
 
+<div class="modal" id="modal_change_password">
+	<div class="modal-content">
+		<div class="row">
+			<div class="input-field col s12 m6 l6">
+				<input type="text" id="change_pass_old"/>
+				<label for="change_pass_old">Old PIN</label>
+			</div>
+			<div class="input-field col s12 m6 l6">
+				<input type="text" id="change_pass_new"/>
+				<label for="change_pass_old">New Pin</label>				
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="change_pass_accept">CHANGE</a>
+	</div>
+</div>
+
 <div class="modal" id="modal_random_display">
 	<div class="modal-content" id="random-data">	
 
 	</div>
 	<div class="modal-footer">
 		<a href="#!" class="modal-action modal-close btn-flat">CLOSE</a>
+	</div>
+</div>
+
+<div class="modal" id="modal_key_pair">
+	<div class="modal-content">
+		<form>
+			<div class='row col s12 m12 l12' >
+				<div class="input-field col s12 m8 l8">
+					<select id="keypair_mechs">
+						<option selected disabled value="">Mechanisms</option>
+					</select>
+					<label>Mechanisms</label>					
+				</div>
+				<div class="input-field col s12 m4 l4">
+					<input type="checkbox" id="keygen_sign" />
+					<label for="keygen_sign">Sign</label>
+				</div>
+			</div>
+			<div class='row col s12 m12 l12' >
+				<div class="input-field col s12 m8 l8">
+					<input id="keypair_name" type="text">
+					<label for="keypair_name">Name</label>					
+				</div>
+				<div class="input-field col s12 m4 l4">
+					<select id="keygen_size">
+						<option value="2048">2048</option>
+						<option value="4096">4096</option>
+					</select>
+					<label></label>
+				</div>
+			</div>
+
+			<div class='row col s12 m12 l12' >
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_sensitive" />
+					<label for="keygen_sensitive">Sensitive</label>				
+				</div>
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_extractable" />
+					<label for="keygen_extractable">Extractable</label>				
+				</div>
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_derive" />
+					<label for="keygen_derive">Derive</label>				
+				</div>
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_verify" />
+					<label for="keygen_verify">Verify</label>				
+				</div>
+			</div>
+
+			<div class='row col s12 m12 l12' >
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_encrypt" />
+					<label for="keygen_encrypt">Encrypt</label>				
+				</div>
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_decrypt" />
+					<label for="keygen_decrypt">Decrypt</label>				
+				</div>
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_wrap" />
+					<label for="keygen_wrap">Wrap</label>				
+				</div>
+				<div class="input-field col s6 m3 l3">
+					<input type="checkbox" id="keygen_unwrap" />
+					<label for="keygen_unwrap">Unwrap</label>				
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<a href="#!" id="keygen_button_accept" class="btn waves waves-effect">GENERATE</a>
 	</div>
 </div>
 

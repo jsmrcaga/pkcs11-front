@@ -55,7 +55,10 @@ config.routing = {
 				return "/token/random/" + id + "/" + bytes + add_jsession();
 			},
 			secret_key: function _tokenSecretKey (id) {
-				return "/token/SecretKey" + id + add_jsession();
+				return "/token/SecretKey/" + id + add_jsession();
+			},
+			key_pair: function _tokenKeyPair(id){
+				return "/token/KeyPair/" + id + add_jsession();
 			}
 
 		}
@@ -281,10 +284,11 @@ function token_random (id, bytes, callback) {
 	Workshop.ajax(options);
 }
 
-function token_secretKey (id, callback) {
+function token_secretKey (id, params, callback) {
 	var options = {
 		url: config.routing.host + config.routing.api.tokens.secret_key(id),
-		method: "GET",
+		method: "PUT",
+		data: params,
 		callback: callback
 	};
 	
@@ -294,12 +298,25 @@ function token_secretKey (id, callback) {
 
 function token_change_pass(id, oldPass, newPass, callback){
 	var options = {
-		url: config.routing.host + config.routing.tokens.change_password,
+		url: config.routing.host + config.routing.api.tokens.change_password(id),
 		method: "PUT",
 		data:{
 			oldPin : oldPass,
 			newPin: newPass
 		},
+		status:204,
+		callback: callback
+	};
+	
+	Workshop.ajax(options);
+}
+
+function token_key_pair (id, params, callback) {
+
+	var options = {
+		url: config.routing.host + config.routing.api.tokens.key_pair(id),
+		method: "PUT",
+		data: params,
 		callback: callback
 	};
 	
@@ -325,6 +342,7 @@ app.routing = {
 		listObjects: token_listObj,
 		random: token_random,
 		secretKey: token_secretKey,
-		changePassword: token_change_pass
+		changePassword: token_change_pass,
+		genKeyPair: token_key_pair,
 	}
 };
